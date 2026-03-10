@@ -9,3 +9,4 @@ Display |         Name         | Github Profile | Portfolio
 Display |     Name     | Github Profile | Portfolio 
 --------|:------------:|:--------------:|:---------:
 ![](https://via.placeholder.com/100.png?text=Photo) | XIAO Yanjing | [Github](https://github.com/Aurosky) | [Portfolio](https://github.com/Aurosky))
+![](https://via.placeholder.com/100.png?text=Photo) | Chakraborty Shrabasti | [Github](https://github.com/shrabasti-c) | [Portfolio](https://github.com/shrabasti-c/shrabasti-c)
