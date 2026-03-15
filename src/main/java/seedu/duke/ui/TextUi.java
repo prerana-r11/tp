@@ -1,10 +1,10 @@
 //@@author shrabasti-c-reused
 //Reused from https://github.com/se-edu/addressbook-level2/blob/master/src/seedu/addressbook/ui/TextUi.java
 //with minor modifications
+
 package seedu.duke.ui;
 
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.Scanner;
 
 /**
@@ -28,6 +28,4 @@ public class TextUi {
     public String getUserCommand() {
         return in.nextLine();
     }
-
-
 }
