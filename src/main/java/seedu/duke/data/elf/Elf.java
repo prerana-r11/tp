@@ -1,10 +1,10 @@
 package seedu.duke.data.elf;
 import seedu.duke.data.child.Name;
-// reuse
+// reuse child
 
 public class Elf implements ReadOnlyElf {
     private Name name;
-    private ElfTask task; // 任务可以在后续通过 setter 分配
+    private ElfTask task;
     
     public Elf(Name name) {
         this.name = name;
