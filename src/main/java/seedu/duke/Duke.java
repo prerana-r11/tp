@@ -50,7 +50,7 @@ public class Duke {
                 String result = command.execute();
                 System.out.println(result); //TODO: ui formatting required
             } catch (IllegalValueException e) {
-                System.out.println("Error"); //TODO: ui formatting required
+                System.out.println(e.getMessage()); //TODO: ui formatting required
             }
         } while (true);
     }

@@ -1,4 +1,5 @@
 package seedu.duke.data.child;
+import java.util.ArrayList;
 
 import java.util.ArrayList;
 import seedu.duke.data.Gift.Gift;
@@ -8,6 +9,11 @@ import seedu.duke.data.Gift.Gift;
 public class Child implements ReadOnlyChild{
     private Name name;
     private ArrayList<Gift> gifts;
+
+    //@@author GShubhan
+    private ArrayList<String> actions = new ArrayList<>();
+    private ArrayList<Integer> severities = new ArrayList<>();
+    //@@author
 
     public Child(Name name) {
         this.name = name;
@@ -40,4 +46,20 @@ public class Child implements ReadOnlyChild{
     public String toString() {
         return name.toString();
     }
+
+    //@@author GShubhan
+    public void addAction(String action, int severity) {
+        actions.add(action);
+        severities.add(severity);
+    }
+
+    public int getTotalScore() {
+        int total = 0;
+        for (int severity : severities) {
+            total += severity;
+        }
+        return total;
+    }
+    //@@author
+
 }

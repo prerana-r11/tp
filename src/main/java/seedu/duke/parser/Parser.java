@@ -2,8 +2,13 @@
 // se-edu/addressbook-level2/blob/master/src/seedu/addressbook/parser/Parser.java and supervision from the author
 package seedu.duke.parser;
 
+import seedu.duke.commands.ActionCommand;
 import seedu.duke.commands.ChildCommand;
+import seedu.duke.commands.ChildListCommand;
+import seedu.duke.commands.ElfListCommand;
+import seedu.duke.commands.FindCommand;
 import seedu.duke.commands.Command;
+
 import seedu.duke.data.exception.IllegalValueException;
 
 public class Parser {
@@ -13,11 +18,29 @@ public class Parser {
         String commandWord = parts[0];
         String arguments = parts.length > 1 ? parts[1] : "";
 
-        if (commandWord.equals("child")) {
+        
+        switch (commandWord) {
+        
+        case "child":
             return prepareAdd(arguments);
-        }
+        
+        case "childlist":
+            return new ChildListCommand();
+        
+        case "elflist":
+            return new ElfListCommand();
+            
+        case "find":
+            return new FindCommand(arguments);
 
-        throw new IllegalValueException("Unknown command.");
+        //@@author GShubhan
+        case "action":
+            return prepareAction(arguments);
+        //@@author
+            
+        default:
+            throw new IllegalValueException("Unknown command. Did you mean 'child' or 'childlist'?");
+        }
     }
 
     private Command prepareAdd(String args) throws IllegalValueException {
@@ -36,5 +59,30 @@ public class Parser {
         }
 
         return new ChildCommand(name);
+    }
+
+    private Command prepareAction(String args) throws IllegalValueException {
+        try {
+            int aIndex = args.indexOf("a/");
+            int sIndex = args.indexOf("s/");
+
+            if (aIndex == -1 || sIndex == -1) {
+                throw new IllegalValueException("Format: action CHILD_INDEX a/ACTION s/SEVERITY");
+            }
+
+            int index = Integer.parseInt(args.trim().split(" ")[0]);
+            String action = args.substring(aIndex + 2, sIndex).trim();
+            int severity = Integer.parseInt(args.substring(sIndex + 2).trim());
+
+            if (severity < -5 || severity > 5) {
+                throw new IllegalValueException("Severity must be between -5 and 5!");
+            }
+
+            return new ActionCommand(index, action, severity);
+        } catch (IllegalValueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new IllegalValueException("Format: action CHILD_INDEX a/ACTION s/SEVERITY");
+        }
     }
 }
