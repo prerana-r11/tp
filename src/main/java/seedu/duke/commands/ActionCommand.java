@@ -1,15 +1,14 @@
 package seedu.duke.commands;
 
 import seedu.duke.data.child.Child;
-import seedu.duke.data.exception.IllegalValueException;
 
 /**
  * Adds an action with severity to a child.
  */
 
 public class ActionCommand extends Command {
-    public String SUCCESS = "Action added for %s: \"%s\" (severity: %d)";
-    public String INVALID_INDEX = "Enter a valid child index";
+    public static final String SUCCESS = "Action added for %s: \"%s\" (severity: %d)";
+    public static final String INVALID_INDEX = "Enter a valid child index";
 
     private int childIndex;
     private String action;
