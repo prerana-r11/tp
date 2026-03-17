@@ -21,10 +21,10 @@ public class Child implements ReadOnlyChild{
     public void addGift(Gift gift){
         gifts.add(gift);
     }
-    public Gift getGift(int index){
-        return gifts.get(index);
+    public void setGiftDelivered(int index, boolean delivered){
+        gifts.get(index).setDelivered(delivered);
     }
-    public void removeGift(int index){
+    public void deGift(int index){
         gifts.remove(index);
     }
     public ArrayList<Gift> getGifts(){

@@ -2,18 +2,12 @@
 // se-edu/addressbook-level2/blob/master/src/seedu/addressbook/parser/Parser.java and supervision from the author
 package seedu.duke.parser;
 
-import seedu.duke.commands.ActionCommand;
-import seedu.duke.commands.ChildCommand;
-import seedu.duke.commands.ChildListCommand;
-import seedu.duke.commands.Command;
-import seedu.duke.commands.ElfListCommand;
-import seedu.duke.commands.FindCommand;
-import seedu.duke.commands.NiceCommand;
-import seedu.duke.commands.GiftCommand;
+import seedu.duke.commands.*;
 
 import seedu.duke.data.exception.IllegalValueException;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Parser {
     public Command parseCommand(String userInput) throws IllegalValueException {
@@ -47,6 +41,12 @@ public class Parser {
 
         case "gift":
             return prepareGiftAction(arguments);
+        case "degift":
+            return prepareDeGiftAction(arguments);
+        case "deliver":
+            return prepareDeliverAction(arguments);
+        case "giftlist":
+            return new GiftListCommand();
 
         default:
             throw new IllegalValueException(
@@ -116,6 +116,41 @@ public class Parser {
             return new GiftCommand(childIndex, giftNames);
         } catch (NumberFormatException e) {
             throw new IllegalValueException("Please use valid command format : g/");
+        }
+
+    }
+    private DeGiftCommand prepareDeGiftAction(String args) throws IllegalValueException {
+        try {
+            String[] parts=args.trim().split(" ");
+            int childIndex= Integer.parseInt(parts[0]);
+            int giftIndex= Integer.parseInt(parts[1]);
+
+            return new DeGiftCommand(childIndex, giftIndex);
+        } catch (NumberFormatException e) {
+            throw new IllegalValueException("Please use valid command format : degift [childindex] [giftindex]");
+        }
+    }
+    private DeliverGiftCommand prepareDeliverAction(String args) throws IllegalValueException {
+        try {
+            String[] parts=args.trim().split(" ");
+            int childIndex= Integer.parseInt(parts[0]);
+            int giftIndex= Integer.parseInt(parts[1]);
+            String status=parts[2].toLowerCase();
+
+            boolean delivered;
+            if(status.equals("delivered")){
+                delivered=true;
+            } else if(status.equals("undelivered")){
+                delivered=false;
+            } else{
+                throw new IllegalValueException("Status must be 'delivered' or 'undelivered'");
+            }
+
+            return new DeliverGiftCommand(childIndex,giftIndex,delivered);
+
+        } catch (NumberFormatException e) {
+            throw new IllegalValueException("Please use valid command format :" +
+                    " deliver [childindex] [giftindex] [delivered/undelivered]");
         }
 
 

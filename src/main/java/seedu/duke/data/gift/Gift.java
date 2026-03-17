@@ -20,7 +20,7 @@ public class Gift {
     }
     @Override
     public String toString(){
-        return isDelivered ? "[Delivered] " : "[Pending]";
+        return (isDelivered ? "[Delivered] " : "[Undelivered]") + giftName;
     }
 }
 

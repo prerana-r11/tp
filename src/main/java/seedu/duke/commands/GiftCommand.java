@@ -1,3 +1,4 @@
+//@@author prerana-r11
 package seedu.duke.commands;
 import seedu.duke.data.gift.Gift;
 import seedu.duke.data.child.Child;
@@ -23,6 +24,7 @@ public class GiftCommand extends Command{
             Gift gift=new Gift(name);
             child.addGift(gift);
         }
-        return "Added gifts to child " + childIndex+1 + ": " + giftNames;
+        return "Added gifts to child " + (childIndex+1) + ": " + giftNames;
     }
 }
+//@@author
