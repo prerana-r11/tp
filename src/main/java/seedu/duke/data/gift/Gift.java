@@ -1,4 +1,4 @@
-package seedu.duke.data.Gift;
+package seedu.duke.data.gift;
 
 public class Gift {
     private final  String giftName;

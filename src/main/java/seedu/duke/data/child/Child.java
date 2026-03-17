@@ -1,8 +1,7 @@
 package seedu.duke.data.child;
 import java.util.ArrayList;
 
-import java.util.ArrayList;
-import seedu.duke.data.Gift.Gift;
+import seedu.duke.data.gift.Gift;
 
 //Solution below inspired by https://github.com/se-edu/addressbook-level2/blob/master/src/seedu/addressbook/data
 // /person/Person.java

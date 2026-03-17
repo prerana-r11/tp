@@ -1,5 +1,5 @@
 package seedu.duke.commands;
-import seedu.duke.data.Gift.Gift;
+import seedu.duke.data.gift.Gift;
 import seedu.duke.data.child.Child;
 
 import java.util.ArrayList;

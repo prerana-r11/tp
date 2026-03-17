@@ -20,7 +20,7 @@ public class Parser {
 
         String commandWord = parts[0];
         String arguments = parts.length > 1 ? parts[1] : "";
-        
+
         switch (commandWord) {
         case "child":
             return prepareAdd(arguments);
