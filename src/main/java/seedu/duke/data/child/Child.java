@@ -43,6 +43,6 @@ public class Child implements ReadOnlyChild{
         }
         return total;
     }
-//@@author
+    //@@author
 
 }
