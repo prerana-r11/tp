@@ -8,7 +8,6 @@ import seedu.duke.commands.ChildListCommand;
 import seedu.duke.commands.Command;
 import seedu.duke.commands.ElfListCommand;
 import seedu.duke.commands.FindCommand;
-import seedu.duke.commands.Command;
 import seedu.duke.commands.NiceCommand;
 import seedu.duke.commands.GiftCommand;
 
