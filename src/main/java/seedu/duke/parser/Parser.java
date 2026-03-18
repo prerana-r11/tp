@@ -15,6 +15,7 @@ import seedu.duke.commands.NiceCommand;
 import seedu.duke.commands.DeGiftCommand;
 import seedu.duke.commands.ViewCommand;
 import seedu.duke.commands.EditCommand;
+import seedu.duke.commands.DeleteCommand;
 
 import seedu.duke.data.exception.IllegalValueException;
 
@@ -36,6 +37,9 @@ public class Parser {
 
         case "edit":
             return prepareEdit(arguments);
+
+        case "delete":
+            return prepareDelete(arguments);
 
         case "childlist":
             return new ChildListCommand();
@@ -96,6 +100,15 @@ public class Parser {
             return new ViewCommand(childIndex);
         } catch (NumberFormatException e) {
             throw new IllegalValueException("Please use valid command format : view [childindex]");
+        }
+    }
+
+    private Command prepareDelete(String args) throws IllegalValueException {
+        try {
+            int childIndex= Integer.parseInt(args.trim()) - 1;
+            return new DeleteCommand(childIndex);
+        } catch (NumberFormatException e) {
+            throw new IllegalValueException("Please use valid command format : delete [childindex]");
         }
     }
 
