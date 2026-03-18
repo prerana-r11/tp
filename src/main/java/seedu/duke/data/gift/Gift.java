@@ -4,9 +4,10 @@ import java.util.logging.Logger;
 
 
 public class Gift {
+    private static final Logger logger = Logger.getLogger(Gift.class.getName());
     private final  String giftName;
     private  boolean isDelivered;
-    private static final Logger logger = Logger.getLogger(Gift.class.getName());
+
 
     public Gift(String giftName){
         assert giftName != null : "Gift name should not be null";
