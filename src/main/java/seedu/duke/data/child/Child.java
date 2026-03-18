@@ -11,6 +11,7 @@ public class Child implements ReadOnlyChild{
     private ArrayList<Gift> gifts;
 
     //@@author GShubhan
+    private String listAssignment = null;
     private ArrayList<String> actions = new ArrayList<>();
     private ArrayList<Integer> severities = new ArrayList<>();
     //@@author
@@ -60,6 +61,25 @@ public class Child implements ReadOnlyChild{
         }
         return total;
     }
+
+    public void setListAssignment(String list) {
+        listAssignment = list;
+    }
     //@@author
 
+    //@@author GShubhan
+    public boolean isNice() {
+        if (listAssignment != null) {
+            return listAssignment.equals("nice");
+        }
+        return getTotalScore() >= 0;
+    }
+
+    public boolean isNaughty() {
+        if (listAssignment != null) {
+            return listAssignment.equals("naughty");
+        }
+        return getTotalScore() < 0;
+    }
+    //@@author
 }

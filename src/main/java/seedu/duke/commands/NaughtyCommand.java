@@ -14,7 +14,7 @@ public class NaughtyCommand extends Command {
         StringBuilder sb = new StringBuilder("Here are the children on the naughty list:\n");
         int count = 1;
         for (int i = 0; i < childList.size(); i++) {
-            if (childList.get(i).getTotalScore()<0) {
+            if (childList.get(i).isNaughty()) {
                 sb.append(count).append(". ")
                         .append(childList.get(i).getName())
                         .append(" (Score: ").append(childList.get(i).getTotalScore()).append(")\n");

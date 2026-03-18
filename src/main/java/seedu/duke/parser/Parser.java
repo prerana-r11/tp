@@ -16,6 +16,7 @@ import seedu.duke.commands.GiftCommand;
 import seedu.duke.commands.GiftListCommand;
 import seedu.duke.commands.NaughtyCommand;
 import seedu.duke.commands.NiceCommand;
+import seedu.duke.commands.ReassignCommand;
 import seedu.duke.commands.ViewCommand;
 import seedu.duke.data.exception.IllegalValueException;
 
@@ -61,6 +62,11 @@ public class Parser {
         //@@author GShubhan
         case "naughty":
             return new NaughtyCommand();
+        //@@author
+        case "reassign":
+            int index = Integer.parseInt(arguments.split(" ")[0]);
+            String list = arguments.split(" ")[1].substring(2);
+            return new ReassignCommand(index, list);
         //@@author
             
 
