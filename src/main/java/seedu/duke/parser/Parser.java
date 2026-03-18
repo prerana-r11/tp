@@ -2,20 +2,7 @@
 // se-edu/addressbook-level2/blob/master/src/seedu/addressbook/parser/Parser.java and supervision from the author
 package seedu.duke.parser;
 
-import seedu.duke.commands.ActionCommand;
-import seedu.duke.commands.ChildCommand;
-import seedu.duke.commands.ChildListCommand;
-import seedu.duke.commands.Command;
-import seedu.duke.commands.DeliverGiftCommand;
-import seedu.duke.commands.ElfListCommand;
-import seedu.duke.commands.FindCommand;
-import seedu.duke.commands.GiftCommand;
-import seedu.duke.commands.GiftListCommand;
-import seedu.duke.commands.NiceCommand;
-import seedu.duke.commands.DeGiftCommand;
-import seedu.duke.commands.ViewCommand;
-import seedu.duke.commands.EditCommand;
-import seedu.duke.commands.DeleteCommand;
+import seedu.duke.commands.*;
 
 import seedu.duke.data.exception.IllegalValueException;
 
@@ -57,6 +44,10 @@ public class Parser {
         //@@author GShubhan
         case "nice":
             return new NiceCommand();
+        //@@author
+        //@@author GShubhan
+        case "naughty":
+            return new NaughtyCommand();
         //@@author
             
 
