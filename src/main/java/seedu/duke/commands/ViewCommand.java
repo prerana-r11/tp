@@ -24,10 +24,10 @@ public class ViewCommand extends Command{
         StringBuilder sb= new StringBuilder("Name: " + child.getName()+" \n");
 
         ArrayList<Gift> gifts = child.getGifts();
-            if (!gifts.isEmpty()) {
-                sb.append("Gifts: \n");
-                createList(gifts, sb);
-            }
+        if (!gifts.isEmpty()) {
+            sb.append("Gifts: \n");
+            createList(gifts, sb);
+        }
         sb.append("Current Status: ").append((child.getTotalScore() >= 0) ? "Nice" : "Naughty").append(" \n");
         return sb.toString();
     }
