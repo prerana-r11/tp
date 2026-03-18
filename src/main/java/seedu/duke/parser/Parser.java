@@ -205,9 +205,9 @@ public class Parser {
             String status=parts[2].toLowerCase();
 
             boolean delivered;
-            if(status.equals("delivered")){
+            if(status.equals("d/delivered")){
                 delivered=true;
-            } else if(status.equals("undelivered")){
+            } else if(status.equals("d/undelivered")){
                 delivered=false;
             } else{
                 throw new IllegalValueException("Status must be 'delivered' or 'undelivered'");
@@ -217,7 +217,7 @@ public class Parser {
 
         } catch (NumberFormatException e) {
             throw new IllegalValueException("Please use valid command format :" +
-                    " deliver [childindex] [giftindex] [delivered/undelivered]");
+                    " deliver [childindex] [giftindex] [d/[delivered/undelivered]]");
         }
 
 
