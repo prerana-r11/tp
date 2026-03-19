@@ -21,7 +21,8 @@ public abstract class Command {
     /**
      * Supplies the data the command will operate on.
      */
-    public void setData(ArrayList<Child> childList) {
+    public void setData(ArrayList<Child> childList, ArrayList<Elf> elfList) {
         this.childList = childList;
+        this.elfList = elfList;
     }
 }
