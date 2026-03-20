@@ -21,6 +21,7 @@ public class ChildCommand extends Command {
      */
     public ChildCommand(String name) throws IllegalValueException {
         this.toAdd = new Child(new Name(name));
+        assert toAdd != null : "Child should not be null";
     }
 
     @Override
