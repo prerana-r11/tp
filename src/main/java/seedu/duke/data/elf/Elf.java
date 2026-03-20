@@ -1,7 +1,7 @@
 //@@author Kiri
 package seedu.duke.data.elf;
 import seedu.duke.data.child.Name;
-// reuse child
+// reuse child class code
 
 public class Elf implements ReadOnlyElf {
     private Name name;
@@ -17,10 +17,6 @@ public class Elf implements ReadOnlyElf {
         return name;
     }
     
-    @Override
-    public ElfTask getTask() {
-        return task;
-    }
     // assign task to elf
     public void setTask(ElfTask task) {
         this.task = task;
