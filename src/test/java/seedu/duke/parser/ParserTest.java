@@ -9,7 +9,6 @@ import seedu.duke.data.exception.IllegalValueException;
 //@@author shrabasti-c-reused
 //generated using ChatGPT
 public class ParserTest {
-
     private Parser parser = new Parser();  // Assuming the Parser object is created here
 
     /**

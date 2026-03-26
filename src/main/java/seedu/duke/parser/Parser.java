@@ -1,6 +1,3 @@
-// ChatGPT was used to generate the parseCommand and prepareAdd functions with reference from https://github.com/
-// se-edu/addressbook-level2/blob/master/src/seedu/addressbook/parser/Parser.java and supervision from the author
-
 package seedu.duke.parser;
 
 import seedu.duke.commands.ActionCommand;
@@ -23,12 +20,14 @@ import seedu.duke.commands.TaskCommand;
 import seedu.duke.commands.ViewCommand;
 import seedu.duke.data.exception.IllegalValueException;
 import seedu.duke.commands.FinalizeCommand;
-
-
-//@@author shrabasti-c
 import java.util.ArrayList;
 
+
 public class Parser {
+
+    //@@author shrabasti-c-reused
+    // ChatGPT was used to generate the boilerplate of parseCommand function with reference from https://github.com/
+    // se-edu/addressbook-level2/blob/master/src/seedu/addressbook/parser/Parser.java and supervision from the author
     public Command parseCommand(String userInput) throws IllegalValueException {
         String[] parts = userInput.trim().split(" ", 2);
 
@@ -47,8 +46,8 @@ public class Parser {
 
         case "delete":
             return prepareDelete(arguments);
-
         //@@author
+
         //@@author Kiri
         case "childlist":
             return new ChildListCommand();
@@ -65,10 +64,10 @@ public class Parser {
         case "task":
             return prepareTaskAction(arguments);
         //@@author
-        
+
         case "action":
             return prepareAction(arguments);
-            
+
         //@@author
 
         //@@author GShubhan
@@ -108,7 +107,9 @@ public class Parser {
 
     }
 
-    //@@author shrabasti-c
+    //@@author shrabasti-c-reused
+    // ChatGPT was used to generate the prepareAdd function with reference from https://github.com/
+    // se-edu/addressbook-level2/blob/master/src/seedu/addressbook/parser/Parser.java and supervision from the author
     private Command prepareAdd(String args) throws IllegalValueException {
         String name = null;
 
@@ -126,7 +127,9 @@ public class Parser {
 
         return new ChildCommand(name);
     }
+    //@@author
 
+    //@@author shrabasti-c
     private Command prepareView(String args) throws IllegalValueException {
         try {
             int childIndex= Integer.parseInt(args.trim()) - 1;
@@ -162,8 +165,8 @@ public class Parser {
             throw new IllegalValueException("Format: edit CHILD_INDEX n/NAME");
         }
     }
-
     //@@author
+
     private Command prepareAction(String args) throws IllegalValueException {
         try {
             int aIndex = args.indexOf("a/");
