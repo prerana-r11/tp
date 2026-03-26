@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import seedu.duke.commands.FinalizeCommand;
 
 
-
+//@@author shrabasti-c
 public class Duke {
 
     public static final String LOGO = "  .-\"\"-.\n" +
@@ -92,4 +92,5 @@ public class Duke {
         new Duke().run();
     }
 }
+//@@author
 
