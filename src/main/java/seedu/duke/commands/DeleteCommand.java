@@ -1,6 +1,6 @@
-//@@author shrabasti-c
 package seedu.duke.commands;
 
+//@@author shrabasti-c
 public class DeleteCommand extends Command {
     private final int childIndex;
 

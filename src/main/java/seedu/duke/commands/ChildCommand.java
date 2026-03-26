@@ -1,12 +1,11 @@
-//@@author shrabasti-c
-//Solution below adapted from https://github.com/se-edu/addressbook-level2/blob/master/src/seedu/addressbook
-// /commands/AddCommand.java and shrabasti-c's iP
 package seedu.duke.commands;
-
-
 import seedu.duke.data.exception.IllegalValueException;
 import seedu.duke.data.child.Name;
 import seedu.duke.data.child.Child;
+
+//@@author shrabasti-c
+//Solution below adapted from https://github.com/se-edu/addressbook-level2/blob/master/src/seedu/addressbook
+// /commands/AddCommand.java and shrabasti-c's iP
 
 /**
  * Adds a child to the child list.
@@ -30,6 +29,5 @@ public class ChildCommand extends Command {
         childList.add(toAdd);
         return String.format(MESSAGE_SUCCESS, toAdd);
     }
-
 }
 //@@author

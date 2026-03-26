@@ -1,6 +1,6 @@
 package seedu.duke.data.child;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 import seedu.duke.data.exception.IllegalValueException;
 import seedu.duke.data.gift.Gift;
 
@@ -10,7 +10,6 @@ import seedu.duke.data.gift.Gift;
 public class Child implements ReadOnlyChild{
     private Name name;
     private ArrayList<Gift> gifts;
-
     //@@author
 
     //@@author GShubhan
@@ -24,6 +23,8 @@ public class Child implements ReadOnlyChild{
         this.name = name;
         this.gifts=new ArrayList<>();
     }
+    //@@author
+
     public void addGift(Gift gift){
         gifts.add(gift);
     }
@@ -31,16 +32,21 @@ public class Child implements ReadOnlyChild{
         return gifts;
     }
 
+    //@@author shrabasti-c
     @Override
     public Name getName() {
         return name;
     }
+    //@@author
 
+    //@@author shrabasti-c-reused
     // ChatGPT was used to ideate and generate this mutator method
     public void setName(String newName) throws IllegalValueException {
         this.name = new Name(newName);
     }
+    //@@author
 
+    //@@author shrabasti-c
     @Override
     public String toString() {
         return name.toString();

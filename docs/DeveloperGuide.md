@@ -20,6 +20,17 @@ This flag is passed to every command via setData() in Command.java.
 When the user types "finalize", FinalizeCommand.execute() returns a success message.
 Duke then detects it via instanceof FinalizeCommand and sets the flag to true.
 
+### Add Child Feature (Chakraborty Shrabasti)
+
+#### Overview
+The "child" command creates a child entity/profile consisting of its name and location.
+
+#### Implementation
+The proposed child profile is facilitated by Child Class. 
+It implements ReadOnlyChild with a name fetching mechanism, stored internally with a Name class with a reference to a name String input by the user.
+Given below is an example usage scenario and how the add child mechanism behaves at each step.
+Step 1. The user launches the application for the first time.
+Step 2. The user executes child n/Bruce Wayne to add a child in the child list.
 
 
 ## Product scope
