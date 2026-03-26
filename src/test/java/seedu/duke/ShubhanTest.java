@@ -28,7 +28,7 @@ public class ShubhanTest {
     @Test
     public void actionCommand_validIndex_addsAction() {
         ActionCommand cmd = new ActionCommand(1, "helped grandma", 2);
-        cmd.setData(childList, new ArrayList<>());
+        cmd.setData(childList, new ArrayList<>(), false);
         cmd.execute();
         assertEquals(2, childList.get(0).getTotalScore());
     }
@@ -36,7 +36,7 @@ public class ShubhanTest {
     @Test
     public void actionCommand_invalidIndex_returnsError() {
         ActionCommand cmd = new ActionCommand(99, "helped grandma", 2);
-        cmd.setData(childList, new ArrayList<>());
+        cmd.setData(childList, new ArrayList<>(), false);
         String result = cmd.execute();
         assertEquals("Enter a valid child index", result);
     }
@@ -46,7 +46,7 @@ public class ShubhanTest {
         childList.get(0).addAction("helped grandma", 2);
         childList.get(1).addAction("broke window", -3);
         NiceCommand cmd = new NiceCommand();
-        cmd.setData(childList, new ArrayList<>());
+        cmd.setData(childList, new ArrayList<>(), false);
         String result = cmd.execute();
         assertTrue(result.contains("Tom"));
         assertTrue(!result.contains("Lucy"));
@@ -56,7 +56,7 @@ public class ShubhanTest {
     public void naughtyCommand_returnsNaughtyChildren() {
         childList.get(1).addAction("broke window", -3);
         NaughtyCommand cmd = new NaughtyCommand();
-        cmd.setData(childList, new ArrayList<>());
+        cmd.setData(childList, new ArrayList<>(), false);
         String result = cmd.execute();
         assertTrue(result.contains("Lucy"));
     }
@@ -65,7 +65,7 @@ public class ShubhanTest {
     public void reassignCommand_overridesListAssignment() {
         childList.get(0).addAction("broke window", -3);
         ReassignCommand cmd = new ReassignCommand(1, "nice");
-        cmd.setData(childList, new ArrayList<>());
+        cmd.setData(childList, new ArrayList<>(), false);
         cmd.execute();
         assertTrue(childList.get(0).isNice());
     }
