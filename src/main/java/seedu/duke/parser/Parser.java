@@ -22,6 +22,8 @@ import seedu.duke.commands.ReassignCommand;
 import seedu.duke.commands.TaskCommand;
 import seedu.duke.commands.ViewCommand;
 import seedu.duke.data.exception.IllegalValueException;
+import seedu.duke.commands.FinalizeCommand;
+
 
 //@@author shrabasti-c
 import java.util.ArrayList;
@@ -72,6 +74,10 @@ public class Parser {
         //@@author GShubhan
         case "nice":
             return new NiceCommand();
+        case "finalize":
+            // fall through
+        case "finalise":
+            return new FinalizeCommand();
         //@@author
         //@@author GShubhan
         case "naughty":
@@ -82,8 +88,9 @@ public class Parser {
             String list = arguments.split(" ")[1].substring(2);
             return new ReassignCommand(index, list);
         //@@author
-            
 
+
+        //@@author prerana-r11
         case "gift":
             return prepareGiftAction(arguments);
         case "degift":
@@ -92,6 +99,7 @@ public class Parser {
             return prepareDeliverAction(arguments);
         case "giftlist":
             return new GiftListCommand();
+        //@@author
 
         default:
             throw new IllegalValueException(
@@ -181,6 +189,7 @@ public class Parser {
         }
     }
 
+    //@@author prerana-r11
     private GiftCommand prepareGiftAction(String args) throws IllegalValueException {
         try {
             String[] parts=args.trim().split(" ");
@@ -238,6 +247,8 @@ public class Parser {
 
 
     }
+    //@@author
+
     
     // @@author Kiri
     private Command prepareFind(String args) throws IllegalValueException {
