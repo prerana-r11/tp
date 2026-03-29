@@ -34,6 +34,9 @@ public class Gift {
     public boolean isDelivered(){
         return state==State.DELIVERED;
     }
+    public State getState(){
+        return state;
+    }
 
     public void markPrepared() {
         if (state == State.DELIVERED) {
