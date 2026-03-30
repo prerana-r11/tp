@@ -1,15 +1,18 @@
-// ChatGPT was used to generate the parseCommand and prepareAdd functions with reference from https://github.com/
-// se-edu/addressbook-level2/blob/master/src/seedu/addressbook/parser/Parser.java and supervision from the author
 package seedu.duke.parser;
 
 import seedu.duke.commands.*;
 import seedu.duke.data.exception.IllegalValueException;
-
+import seedu.duke.commands.FinalizeCommand;
 import java.util.ArrayList;
+
 
 public class Parser {
     private static Command pendingCommand = null;
     
+
+    //@@author shrabasti-c-reused
+    // ChatGPT was used to generate the boilerplate of parseCommand function with reference from https://github.com/
+    // se-edu/addressbook-level2/blob/master/src/seedu/addressbook/parser/Parser.java and supervision from the author
     public Command parseCommand(String userInput) throws IllegalValueException {
         
         //@@author Kiri
@@ -43,6 +46,8 @@ public class Parser {
             pendingCommand = prepareDelete(arguments);
             throw new IllegalValueException("WARNING: You are about to delete a child. Type 'confirm' to proceed.");
         
+        //@@author
+
         //@@author Kiri
         case "childlist":
             return new ChildListCommand();
@@ -75,15 +80,19 @@ public class Parser {
             throw new IllegalValueException("WARNING: This will wipe ALL data and reset to initial state. " +
                     "Type 'confirm' to proceed.");
         //@@author
-        
+
         case "action":
             return prepareAction(arguments);
-            
+
         //@@author
 
         //@@author GShubhan
         case "nice":
             return new NiceCommand();
+        case "finalize":
+            // fall through
+        case "finalise":
+            return new FinalizeCommand();
         //@@author
         //@@author GShubhan
         case "naughty":
@@ -94,8 +103,9 @@ public class Parser {
             String list = arguments.split(" ")[1].substring(2);
             return new ReassignCommand(index, list);
         //@@author
-            
 
+
+        //@@author prerana-r11
         case "gift":
             return prepareGiftAction(arguments);
         case "degift":
@@ -105,6 +115,7 @@ public class Parser {
             return prepareDeliverAction(arguments);
         case "giftlist":
             return new GiftListCommand();
+        //@@author
 
         default:
             throw new IllegalValueException(
@@ -113,6 +124,9 @@ public class Parser {
 
     }
 
+    //@@author shrabasti-c-reused
+    // ChatGPT was used to generate the prepareAdd function with reference from https://github.com/
+    // se-edu/addressbook-level2/blob/master/src/seedu/addressbook/parser/Parser.java and supervision from the author
     private Command prepareAdd(String args) throws IllegalValueException {
         String name = null;
 
@@ -130,7 +144,9 @@ public class Parser {
 
         return new ChildCommand(name);
     }
+    //@@author
 
+    //@@author shrabasti-c
     private Command prepareView(String args) throws IllegalValueException {
         try {
             int childIndex= Integer.parseInt(args.trim()) - 1;
@@ -166,6 +182,7 @@ public class Parser {
             throw new IllegalValueException("Format: edit CHILD_INDEX n/NAME");
         }
     }
+    //@@author
 
     private Command prepareAction(String args) throws IllegalValueException {
         try {
@@ -192,6 +209,7 @@ public class Parser {
         }
     }
 
+    //@@author prerana-r11
     private GiftCommand prepareGiftAction(String args) throws IllegalValueException {
         try {
             String[] parts=args.trim().split(" ");
@@ -229,18 +247,8 @@ public class Parser {
             String[] parts=args.trim().split(" ");
             int childIndex= Integer.parseInt(parts[0]);
             int giftIndex= Integer.parseInt(parts[1]);
-            String status=parts[2].toLowerCase();
 
-            boolean delivered;
-            if(status.equals("d/delivered")){
-                delivered=true;
-            } else if(status.equals("d/undelivered")){
-                delivered=false;
-            } else{
-                throw new IllegalValueException("Status must be 'delivered' or 'undelivered'");
-            }
-
-            return new DeliverGiftCommand(childIndex,giftIndex,delivered);
+            return new DeliverGiftCommand(childIndex,giftIndex);
 
         } catch (NumberFormatException e) {
             throw new IllegalValueException("Please use valid command format :" +
@@ -249,6 +257,8 @@ public class Parser {
 
 
     }
+    //@@author
+
     
     // @@author Kiri
     private Command prepareFind(String args) throws IllegalValueException {
