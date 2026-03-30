@@ -43,7 +43,8 @@ public class DetaskCommand extends Command {
         }
         
         if (taskIndex < 1 || taskIndex > tasks.size()) {
-            logger.log(Level.WARNING, "Detask failed: Invalid Task index " + taskIndex + " for Elf " + targetElf.getName());
+            logger.log(Level.WARNING, "Detask failed: Invalid Task index "
+                    + taskIndex + " for Elf " + targetElf.getName());
             return "Error: Invalid Task index. This elf has " + tasks.size() + " tasks.";
         }
        

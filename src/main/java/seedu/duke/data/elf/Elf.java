@@ -37,7 +37,9 @@ public class Elf implements ReadOnlyElf {
             sb.append(" (Tasks: ");
             for (int i = 0; i < tasks.size(); i++) {
                 sb.append((i + 1)).append(". ").append(tasks.get(i));
-                if (i < tasks.size() - 1) sb.append(", ");
+                if (i < tasks.size() - 1) {
+                    sb.append(", ");
+                }
             }
             sb.append(")");
         }

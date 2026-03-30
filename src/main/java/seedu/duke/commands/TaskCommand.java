@@ -7,10 +7,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TaskCommand extends Command {
-    private static final Logger logger = Logger.getLogger(TaskCommand.class.getName());
-    
     public static final String MESSAGE_SUCCESS = "Ho ho ho! Task [%1$s] assigned to Elf: %2$s";
     public static final String MESSAGE_INVALID_INDEX = "Error: Invalid Elf index. You have %1$d elves.";
+    
+    private static final Logger logger = Logger.getLogger(TaskCommand.class.getName());
     
     private final int targetIndex;
     private final String taskContent;

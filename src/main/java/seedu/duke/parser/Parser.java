@@ -2,7 +2,28 @@
 // se-edu/addressbook-level2/blob/master/src/seedu/addressbook/parser/Parser.java and supervision from the author
 package seedu.duke.parser;
 
-import seedu.duke.commands.*;
+import seedu.duke.commands.ActionCommand;
+import seedu.duke.commands.ChildCommand;
+import seedu.duke.commands.ChildListCommand;
+import seedu.duke.commands.Command;
+import seedu.duke.commands.DeGiftCommand;
+import seedu.duke.commands.DeleteCommand;
+import seedu.duke.commands.DeliverGiftCommand;
+import seedu.duke.commands.DetaskCommand;
+import seedu.duke.commands.EditCommand;
+import seedu.duke.commands.EditElfCommand;
+import seedu.duke.commands.ElfCommand;
+import seedu.duke.commands.ElfListCommand;
+import seedu.duke.commands.FindCommand;
+import seedu.duke.commands.GiftCommand;
+import seedu.duke.commands.GiftListCommand;
+import seedu.duke.commands.NaughtyCommand;
+import seedu.duke.commands.NiceCommand;
+import seedu.duke.commands.ReassignCommand;
+import seedu.duke.commands.ResetCommand;
+import seedu.duke.commands.RmElfCommand;
+import seedu.duke.commands.TaskCommand;
+import seedu.duke.commands.ViewCommand;
 import seedu.duke.data.exception.IllegalValueException;
 
 import java.util.ArrayList;
