@@ -21,15 +21,15 @@ Duke then detects it via instanceof FinalizeCommand and sets the flag to true.
 ### Add Child Feature (Chakraborty Shrabasti)
 
 #### Overview
-The "child" command creates a child entity/profile consisting of its name and location.
+The `child` command creates a child entity/profile consisting of its name and location.
 
 #### Implementation
 The proposed child profile is facilitated by `Child` Class. 
 It implements `ReadOnlyChild` which contains a name fetching mechanism, the name being stored internally via a `Name` class with a reference to a `name` String input by the user.
 The child operation must minimally have a name argument i.e. location, etc. are optional.
 Additionally, it implements the following operations:
-* `toAdd()`— adds the child to the internal child list.
-* `execute()`— returns a successfull operation message.
+* `toAdd()`—adds the child to the internal child list.
+* `execute()`—returns a successful operation message.
 These operations comprise the `ChildCommand` class (which inherits from a base `Command` class).
 Given below is an example usage scenario and how the add child mechanism behaves at each step.
 1. The user launches the application for the first time.
@@ -41,7 +41,7 @@ Given below is an example usage scenario and how the add child mechanism behaves
 6. The successful message is displayed.
 
 Given below is a sequence diagram describing the child operation (happy path).
-![](team/ChildSequenceDiagram.png)
+![](diagrams/ChildSequenceDiagram.png)
 
 **Aspect:** How to implement the Child Profile  
   - **Alternative 1 (current choice):** Construct a `ReadOnlyChild` interface which implements `Child`  
