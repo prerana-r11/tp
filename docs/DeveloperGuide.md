@@ -13,7 +13,7 @@ The "finalize" command freezes the nice and naughty lists, preventing further
 action changes and enabling gift allocation.
 
 #### Implementation
-The finalize feature uses a boolean flag "isFinalized" stored in Duke.java.
+The finalize feature uses a boolean flag "isFinalized" that is stored in Duke.java.
 This flag is passed to every command via setData() in Command.java.
 When the user types "finalize", FinalizeCommand.execute() returns a success message.
 Duke then detects it via instanceof FinalizeCommand and sets the flag to true.
@@ -39,7 +39,7 @@ Given below is an example usage scenario:
 
 Given below is a sequence diagram showing how the finalize command works.
 
-![](FinalizeSequenceDiagram.png)
+![](diagrams/FinalizeSequenceDiagram.png)
 
 ### Add Child Feature (Chakraborty Shrabasti)
 
