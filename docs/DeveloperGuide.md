@@ -43,7 +43,7 @@ Additionally, it implements the following operations:
 6. The successful message is displayed.
 
 Given below is a sequence diagram describing the child operation (happy path).
-![](team/ChildSequenceDiagram.png)
+![](diagrams/ChildSequenceDiagram.png)
 
 **Aspect:** How to implement the Child Profile
 - **Alternative 1 (current choice):** Construct a `ReadOnlyChild` interface which implements `Child`
