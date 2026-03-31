@@ -9,14 +9,37 @@
 ### Finalize Feature (Shubhan Gabra)
 
 #### Overview
-The "finalize" command freezes the nice and naughty lists, preventing further addition of actions and reassignments.
-After the finalize command, gift assignment is enabled.
+The "finalize" command freezes the nice and naughty lists, preventing further
+action changes and enabling gift allocation.
 
 #### Implementation
 The finalize feature uses a boolean flag "isFinalized" stored in Duke.java.
 This flag is passed to every command via setData() in Command.java.
 When the user types "finalize", FinalizeCommand.execute() returns a success message.
 Duke then detects it via instanceof FinalizeCommand and sets the flag to true.
+
+ActionCommand, GiftCommand and ReassignCommand each check "isFinalized"
+at the start of execute(). Once finalized, action additions and reassignments
+are blocked since the lists are frozen. Gift allocation is also blocked
+before finalization since gifts should only be assigned after the lists are set.
+
+#### Why this way?
+The instanceof approach was chosen to keep each command class simple and focused.
+Other options like passing a mutable wrapper object or using a static field were
+considered but not used as they were less readable or harder to test.
+
+Given below is an example usage scenario:
+
+1. Add a child: child n/Tom  
+2. Try adding a gift: gift 1 g/toy: should be blocked  
+3. Add an action: action 1 a/helped grandma s/2  
+4. Finalize: finalize  
+5. Try adding another action: should be blocked  
+6. Add a gift: gift 1 g/toy: should work now
+
+Given below is a sequence diagram showing how the finalize command works.
+
+![](FinalizeSequenceDiagram.png)
 
 ### Add Child Feature (Chakraborty Shrabasti)
 
