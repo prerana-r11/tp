@@ -3,12 +3,12 @@ package seedu.duke.commands;
 import seedu.duke.data.child.Child;
 import seedu.duke.data.gift.Gift;
 
-public class DeliverGiftCommand extends Command{
+public class DeliveryStatusCommand extends Command{
     private int childIndex;
     private int giftIndex;
     private boolean delivered;
 
-    public DeliverGiftCommand(int childIndex,int giftIndex,boolean delivered){
+    public DeliveryStatusCommand(int childIndex, int giftIndex, boolean delivered){
         this.childIndex=childIndex;
         this.giftIndex=giftIndex;
         this.delivered=delivered;

@@ -10,7 +10,7 @@ participant Gift #E9F6EF
 Santa -> Parser : gift 1 g/toy g/book
 activate Parser
 
-Parser -> Parser : parseCommand(...)
+Parser -> Parser : parseCommand("gift 1 g/toy g/book")
 Parser -> Parser : prepareGiftAction(args)
 Parser -> GiftCommand : new GiftCommand(childIndex, giftNames)
 
