@@ -6,6 +6,7 @@ import seedu.clauscontrol.data.elf.Elf;
 import seedu.clauscontrol.data.exception.IllegalValueException;
 import seedu.clauscontrol.data.todo.Todo;
 import seedu.clauscontrol.parser.Parser;
+import seedu.clauscontrol.storage.TodoStorage;
 import seedu.clauscontrol.ui.TextUi;
 
 import seedu.clauscontrol.storage.Storage;
@@ -37,10 +38,12 @@ public class ClausControl {
     //@@author GShubhan
     private boolean isFinalized = false;
     private ArrayList<Todo> todoList = new ArrayList<>();
+    private TodoStorage todoStorage = new TodoStorage("todos.txt");
+
     //@@author
 
     private TextUi ui = new TextUi();
-    private final Parser parser = new Parser(todoList);
+    private Parser parser;
     private ArrayList<Child> childList = new ArrayList<>();
     private ArrayList<Elf> elfList = new ArrayList<>();
 
@@ -64,8 +67,15 @@ public class ClausControl {
             this.childList = new ArrayList<>();
         }
         //@@author
-
+        //@@author GShubhan
+        try {
+            this.todoList = new ArrayList<>(todoStorage.load());
+        } catch (IOException e) {
+            this.todoList = new ArrayList<>();
+        }
+        this.parser = new Parser(todoList);  // initialize AFTER loading todos
     }
+    //@@author
     //@@author
 
     /** Reads the user command and executes it, until the user issues the exit command.  */
@@ -90,6 +100,12 @@ public class ClausControl {
                 if (command instanceof FinalizeCommand) {
                     isFinalized = true;
                 }
+                try {
+                    todoStorage.save(todoList);
+                } catch (IOException e) {
+                    logger.warning("Error saving todos: " + e.getMessage());
+                }
+
                 System.out.println(result); //TODO: ui formatting required
                 //@@author
             } catch (IllegalValueException e) {
@@ -104,10 +120,26 @@ public class ClausControl {
     /** Runs the program until termination.  */
     public void run() throws IllegalValueException {
         System.out.println(LOGO);
+        showUpcomingTodos();
         runCommandLoopUntilExitCommand();
         //System.exit(0);
     }
-
+    //@@author GShubhan
+    private void showUpcomingTodos() {
+        StringBuilder sb = new StringBuilder();
+        for (Todo todo : todoList) {
+            if (todo.isUpcoming()) {
+                sb.append("- ").append(todo.getDescription())
+                        .append(" (due: ").append(todo.getDeadline()).append(")\n");
+            }
+        }
+        if (sb.length() > 0) {
+            System.out.println("Upcoming reminders this week:");
+            System.out.println(sb.toString().trim());
+            System.out.println();
+        }
+    }
+    //@@author
     /**
      * Main entry-point for the ClausControl application.
      */

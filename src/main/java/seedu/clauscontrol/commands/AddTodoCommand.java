@@ -31,7 +31,12 @@ public class AddTodoCommand extends Command {
             String description = arguments.substring(dIndex + 2, byIndex).trim();
             String dateStr = arguments.substring(byIndex + 3).trim();
             LocalDate deadline = LocalDate.parse(dateStr);
-
+            if (description.isEmpty()) {
+                return "Description cannot be empty!";
+            }
+            if (deadline.isBefore(LocalDate.now())) {
+                return "Deadline cannot be in the past!";
+            }
             todoList.add(new Todo(description, deadline));
             return "Todo added: " + description + " (due: " + deadline + ")";
         } catch (DateTimeParseException e) {
