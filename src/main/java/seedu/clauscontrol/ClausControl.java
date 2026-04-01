@@ -48,16 +48,6 @@ public class ClausControl {
 
     //@@author
 
-    private TextUi ui = new TextUi();
-    private Parser parser;
-    private ArrayList<Child> childList = new ArrayList<>();
-    private ArrayList<Elf> elfList = new ArrayList<>();
-
-    private Storage storage= new Storage("data.txt");
-    public ClausControl() {
-        this(System.in);
-    }
-
     //@@author prerana-r11
     public ClausControl(InputStream inputStream) {
         this.ui = new TextUi(inputStream);
