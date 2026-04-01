@@ -24,6 +24,7 @@ public class Child implements ReadOnlyChild{
         this.name = name;
         this.gifts=new ArrayList<>();
     }
+    //@@author
     
     //@@author Aurosky
     public Child(Name name, int age, String location) {
@@ -48,7 +49,8 @@ public class Child implements ReadOnlyChild{
         return location != null && !location.isEmpty();
     }
     //@@author
-    
+
+
     public void addGift(Gift gift){
         gifts.add(gift);
     }
@@ -61,16 +63,19 @@ public class Child implements ReadOnlyChild{
     public Name getName() {
         return name;
     }
-    //@@author
 
-    //@@author shrabasti-c-reused
-    // ChatGPT was used to ideate and generate this mutator method
     public void setName(String newName) throws IllegalValueException {
         this.name = new Name(newName);
     }
-    //@@author
 
-    //@@author shrabasti-c
+    public void setLocation(String newLocation) throws IllegalValueException {
+        this.location = newLocation;
+    }
+
+    public void setAge(int newAge) throws IllegalValueException {
+        this.age = newAge;
+    }
+
     @Override
     public String toString() {
         return name.toString();

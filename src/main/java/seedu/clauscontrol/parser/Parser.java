@@ -32,13 +32,7 @@ import java.util.ArrayList;
 
 public class Parser {
     private static Command pendingCommand = null;
-    
-
-    //@@author shrabasti-c-reused
-    // ChatGPT was used to generate the boilerplate of parseCommand function with reference from https://github.com/
-    // se-edu/addressbook-level2/blob/master/src/seedu/addressbook/parser/Parser.java and supervision from the author
     public Command parseCommand(String userInput) throws IllegalValueException {
-        
         //@@author Aurosky
         String trimmedInput = userInput.trim();
         if (trimmedInput.equalsIgnoreCase("confirm")) {
@@ -51,7 +45,11 @@ public class Parser {
         }
         pendingCommand = null;
         //@@author
-        
+
+        //@@author shrabasti-c-reused
+        // ChatGPT was used to generate the below boilerplate with reference from https://github.com/
+        // se-edu/addressbook-level2/blob/master/src/seedu/addressbook/parser/Parser.java and supervision from the
+        // author
         String[] parts = userInput.trim().split(" ", 2);
         String commandWord = parts[0];
         String arguments = parts.length > 1 ? parts[1] : "";
@@ -65,14 +63,13 @@ public class Parser {
 
         case "edit":
             return prepareEdit(arguments);
-
-        case "delete":
-            pendingCommand = prepareDelete(arguments);
-            throw new IllegalValueException("WARNING: You are about to delete a child. Type 'confirm' to proceed.");
-        
         //@@author
 
         //@@author Aurosky
+        case "delete":
+            pendingCommand = prepareDelete(arguments);
+            throw new IllegalValueException("WARNING: You are about to delete a child. Type 'confirm' to proceed.");
+
         case "childlist":
             return new ChildListCommand();
 
@@ -105,29 +102,22 @@ public class Parser {
                     "Type 'confirm' to proceed.");
         //@@author
 
+        //@@author GShubhan
         case "action":
             return prepareAction(arguments);
-
-        //@@author
-
-        //@@author GShubhan
         case "nice":
             return new NiceCommand();
         case "finalize":
             // fall through
         case "finalise":
             return new FinalizeCommand();
-        //@@author
-        //@@author GShubhan
         case "naughty":
             return new NaughtyCommand();
-        //@@author
         case "reassign":
             int index = Integer.parseInt(arguments.split(" ")[0]);
             String list = arguments.split(" ")[1].substring(2);
             return new ReassignCommand(index, list);
         //@@author
-
 
         //@@author prerana-r11
         case "gift":
@@ -141,34 +131,47 @@ public class Parser {
             return new GiftListCommand();
         case "prepared":
             return preparePreparedAction(arguments);
-        //@@author
-
         default:
             throw new IllegalValueException(
                     "Unknown command. Did you mean 'child' or 'childlist'?");
         }
-
+        //@@author
     }
 
     //@@author shrabasti-c-reused
-    // ChatGPT was used to generate the prepareAdd function with reference from https://github.com/
+    // ChatGPT was used to generate the boilerplate of the prepareAdd function with reference from https://github.com/
     // se-edu/addressbook-level2/blob/master/src/seedu/addressbook/parser/Parser.java and supervision from the author
     private Command prepareAdd(String args) throws IllegalValueException {
         String name = null;
+        String location = null;
+        String ageString = null;
+        int age = -1;
 
-        String[] tokens = args.split(" ");
+        String[] tokens = args.split(" (?=[nla]/)");
 
         for (String token : tokens) {
             if (token.startsWith("n/")) {
                 name = token.substring(2);
+            } else if (token.startsWith("l/")) {
+                location = token.substring(2);
+            } else if (token.startsWith("a/")) {
+                ageString = token.substring(2);
             }
         }
 
-        if (name == null || name.isEmpty()) {
-            throw new IllegalValueException("Format: child n/NAME");
-        }
+        checkValidity(name);
 
-        return new ChildCommand(name);
+        if (ageString != null) {
+            age = Integer.parseInt(ageString);
+        }
+        
+        return new ChildCommand(name, location, age);
+    }
+
+    private static void checkValidity(String ageString) throws IllegalValueException {
+        if (ageString == null || ageString.isEmpty()) {
+            throw new IllegalValueException("Format: age a/AGE");
+        }
     }
     //@@author
 
@@ -190,23 +193,56 @@ public class Parser {
             throw new IllegalValueException("Please use valid command format : delete [childindex]");
         }
     }
+    //@@author
 
+
+    //@@author shrabasti-c-reused
+    // Reused from ChatGPT under supervision from the author
     private Command prepareEdit(String args) throws IllegalValueException {
+        String newName = null;
+        String newLocation = null;
+        String ageString = null;
+        Integer newAge = null;
+        int index;
+
+        String[] parts = args.trim().split(" ", 2);
         try {
-            int nIndex = args.indexOf("n/");
-
-            if (nIndex == -1) {
-                throw new IllegalValueException("Format: edit CHILD_INDEX n/NAME");
-            }
-
-            int index = Integer.parseInt(args.trim().split(" ")[0]) - 1;
-            String newName = args.substring(nIndex + 2).trim();
-            return new EditCommand(index, newName);
-        } catch (IllegalValueException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new IllegalValueException("Format: edit CHILD_INDEX n/NAME");
+            index = Integer.parseInt(parts[0]) - 1;
+        } catch (NumberFormatException e) {
+            throw new IllegalValueException("First argument must be the child index");
         }
+
+        if (parts.length < 2) {
+            throw new IllegalValueException("Nothing to edit! Provide n/, l/ or a/");
+        }
+
+        String remaining = parts[1];
+
+
+        String[] tokens = remaining.split("\\s+(?=[nla]/)");
+
+        for (String token : tokens) {
+            if (token.startsWith("n/")) {
+                newName = token.substring(2).trim();
+            } else if (token.startsWith("l/")) {
+                newLocation = token.substring(2).trim();
+            } else if (token.startsWith("a/")) {
+                ageString = token.substring(2).trim();
+                if (!ageString.isEmpty()) {
+                    try {
+                        newAge = Integer.parseInt(ageString);
+                    } catch (NumberFormatException e) {
+                        throw new IllegalValueException("Age must be a number");
+                    }
+                }
+            }
+        }
+
+        if (newName == null && newLocation == null && newAge == null) {
+            throw new IllegalValueException("Nothing to edit! Provide n/, l/ or a/");
+        }
+
+        return new EditCommand(index, newName, newLocation, newAge);
     }
     //@@author
 

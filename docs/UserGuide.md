@@ -2,13 +2,13 @@
 
 ## Introduction
 
-**ElfManager** is a specialized CLI tool designed for efficient tracking and organization of "Elves" and "Children" data. Built for speed and reliability, it allows users to manage complex personnel assignments and location-based data through a clean command-line interface.
+**ClausControl** is a specialized CLI tool designed for efficient tracking and organization of "Elves" and "Children" data. Built for speed and reliability, it allows the user Santa to manage complex personnel assignments and location-based data through a clean command-line interface.
 
 ## Quick Start
 
 1. Ensure that you have **Java 17** or above installed on your computer.
-2. Download the latest version of `Duke` from [here](http://link.to/duke).
-3. Open your terminal, navigate to the folder where the file is located, and run the command: `java -jar duke.jar`.
+2. Download the latest version of `Claus Control` from [here](http://link.to/duke).
+3. Open your terminal, navigate to the folder where the file is located, and run the command: `java -jar clauscontrol.jar`.
 
 ## Features
 
@@ -73,4 +73,3 @@ Searches for children based on their registered location.
 | **Find by Age** | `find a/AGE` | `find a/11` |
 | **Find by Location** | `find l/LOCATION` | `find l/Singapore` |
 
-* Add todo `todo n/TODO_NAME d/DEADLINE`

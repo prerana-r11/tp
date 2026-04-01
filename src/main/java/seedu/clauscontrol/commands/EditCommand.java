@@ -7,10 +7,14 @@ import seedu.clauscontrol.data.exception.IllegalValueException;
 public class EditCommand extends Command {
     private final int childIndex;
     private final String newName;
+    private final String newLocation;
+    private final int newAge;
 
-    public EditCommand(int childIndex, String newName) {
+    public EditCommand(int childIndex, String newName, String newLocation, int newAge) {
         this.childIndex = childIndex;
         this.newName = newName;
+        this.newLocation = newLocation;
+        this.newAge = newAge;
     }
 
     @Override
@@ -23,10 +27,12 @@ public class EditCommand extends Command {
 
         try {
             child.setName(newName);
+            child.setLocation(newLocation);
+            child.setAge(newAge);
         } catch (IllegalValueException e) {
             throw new RuntimeException(e);
         }
-        return "Name changed!";
+        return "Details changed!";
     }
 }
 //@@author
