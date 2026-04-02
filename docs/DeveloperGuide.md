@@ -55,6 +55,81 @@ The storage component provides a unified interface (`Storage.java`) that handles
 - Storage is independent of the command execution logic
 
 ## Design & implementation
+### Child Feature (Chakraborty Shrabasti)
+
+#### Use Case 
+Below is a system-wide use case to illustrate the child profile and its associated actions.
+
+Within the Child Feature, Santa can interact with the `child` profile using the following commands: `child`, `view`, `edit`, `delete`. 
+These commands can be used in conjunction with the `childlist` command.
+Given below is an example usage scenario: 
+
+**Santa, at the beginning of the year, adds children to his system**
+1. child n/Bruce a/25
+2. child n/Diana l/Washington DC
+3. child n/Clark 
+
+**Santa, later in the year, consults the list of children and their individual profiles as and when necessary**
+**He makes updates when needed as well**
+1. childlist
+2. view 3
+2. edit 3 n/Kal El
+3. delete 1
+
+**Santa, throughout the year, adds actions to children's profiles with associated severities in the range [-5, 5].**
+**Each child has a total score attribute that is the sum of his/her action severities. These gifts determine which of Santa's lists they end up in (naughty/nice)**
+1. action 1 a/helped grandma s/2
+2. action 1 a/did homework s/5
+3. action 2 a/was rude to classmate s/-1
+
+**One can observe that child 1 with total score 3 ends up in nice list whereas child 2 ends up in naughty one**
+**However, Santa can `reassign` kids to different lists as well, for instance moving child 2 from naughty to nice**
+
+**Nearing Christmas, Santa freezes the lists, after which gifts can be assigned and no more actions can be added.**
+
+#### Implementation
+As mentioned earlier, the `child` command creates a child entity/profile consisting of its name and location.
+As the implementation of `child` is the most complex of its related commands (`child`, `view`, `edit`, `delete`), let us examine the same.
+
+The proposed child profile is facilitated by `Child` Class.
+It implements `ReadOnlyChild` which contains a name fetching mechanism, the name being stored internally via a `Name` class with a reference to a `name` String input by the user.
+The child operation must minimally have a name argument i.e. location, etc. are optional.
+Additionally, it implements the following operations:
+* `toAdd()`—adds the child to the internal child list.
+* `execute()`—returns a successful operation message.
+  These operations comprise the `ChildCommand` class (which inherits from a base `Command` class).
+  Given below is an example usage scenario and how the add child mechanism behaves at each step.
+1. The user launches the application for the first time.
+2. The user executes `child n/Bruce Wayne` to add a child in the child list.
+3. The Parser parses the command and returns the arguments to a new `ChildCommand`.
+4. Given a valid Name the `Child` object is instantiated and returned.
+* Note: At the point of instantiation the Name is validated. An incorrect input means the object creation does not proceed.
+5. The `Child` is added to the Child List.
+6. The successful message is displayed.
+
+Given below is a sequence diagram describing the child operation (happy path).
+![](diagrams/ChildSequenceDiagram.png)
+
+**Aspect:** How to implement the Child Profile
+- **Alternative 1 (current choice):** Construct a `ReadOnlyChild` interface which implements `Child`
+    - **Pros:** Ensures no external access as well as immutability
+    - **Cons:** More lines of code and more complex implementation (extra interface)
+
+- **Alternative 2:** Implement via a Single `Child` Class
+    - **Pros:** Lesser lines of code and simpler implementation
+    - **Cons:** Higher risk of child data modification
+
+**Aspect:** How to store the Child Name
+- **Alternative 1 (current choice):** Store as `Name` class
+    - **Pros:** Ensures validation at time of object creation
+    - **Cons:** More lines of code and more complex implementation (extra class)
+
+- **Alternative 2:** Store as `String` in `Child` class
+    - **Pros:** Lesser lines of code and simpler implementation
+    - **Cons:** No enforced validation and violation of Separation of Concerns
+
+#### Implementation of `view`, `edit`, and `delete` 
+The aforementioned commands follow a near identical sequence diagram to the Child Command differing only in their execute() methods.
 
 ### Finalize Feature (Shubhan Gabra)
 
@@ -178,51 +253,6 @@ Storage class written by another team member.
   with the existing storage format.
 - Using epoch seconds was rejected as unnecessary since deadlines are
   date-based, not time-based.
-
-
-
-### Add Child Feature (Chakraborty Shrabasti)
-
-#### Overview
-The `child` command creates a child entity/profile consisting of its name and location.
-
-#### Implementation
-The proposed child profile is facilitated by `Child` Class. 
-It implements `ReadOnlyChild` which contains a name fetching mechanism, the name being stored internally via a `Name` class with a reference to a `name` String input by the user.
-The child operation must minimally have a name argument i.e. location, etc. are optional.
-Additionally, it implements the following operations:
-* `toAdd()`—adds the child to the internal child list.
-* `execute()`—returns a successful operation message.
-These operations comprise the `ChildCommand` class (which inherits from a base `Command` class).
-Given below is an example usage scenario and how the add child mechanism behaves at each step.
-1. The user launches the application for the first time.
-2. The user executes `child n/Bruce Wayne` to add a child in the child list.
-3. The Parser parses the command and returns the arguments to a new `ChildCommand`.
-4. Given a valid Name the `Child` object is instantiated and returned.
-* Note: At the point of instantiation the Name is validated. An incorrect input means the object creation does not proceed.
-5. The `Child` is added to the Child List.
-6. The successful message is displayed.
-
-Given below is a sequence diagram describing the child operation (happy path).
-![](diagrams/ChildSequenceDiagram.png)
-
-**Aspect:** How to implement the Child Profile  
-  - **Alternative 1 (current choice):** Construct a `ReadOnlyChild` interface which implements `Child`  
-    - **Pros:** Ensures no external access as well as immutability  
-    - **Cons:** More lines of code and more complex implementation (extra interface)  
-
-  - **Alternative 2:** Implement via a Single `Child` Class  
-    - **Pros:** Lesser lines of code and simpler implementation  
-    - **Cons:** Higher risk of child data modification  
-
- **Aspect:** How to store the Child Name  
-  - **Alternative 1 (current choice):** Store as `Name` class  
-    - **Pros:** Ensures validation at time of object creation  
-    - **Cons:** More lines of code and more complex implementation (extra class)  
-
-  - **Alternative 2:** Store as `String` in `Child` class  
-    - **Pros:** Lesser lines of code and simpler implementation  
-    - **Cons:** No enforced validation and violation of Separation of Concerns  
 
 ### Add Elf Feature (XIAO Yanjing)
 
