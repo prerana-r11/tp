@@ -1,0 +1,12 @@
+@startuml
+Actor Santa
+Santa -> Parser : nice
+Parser -> NiceCommand : new NiceCommand()
+NiceCommand -> Command : setData(childList, elfList, isFinalized)
+loop for each child in childList
+    NiceCommand -> Child : isNice()
+    Child -> Child : check listAssignment
+    Child --> NiceCommand : true/false
+end
+NiceCommand --> Santa : list of nice children
+@enduml

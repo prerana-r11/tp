@@ -1,0 +1,8 @@
+@startuml
+Actor Santa
+Santa -> Parser : reassign 1 l/nice
+Parser -> ReassignCommand : new ReassignCommand(1, "nice")
+ReassignCommand -> Command : setData(childList, elfList, isFinalized)
+ReassignCommand -> Child : setListAssignment("nice")
+ReassignCommand --> Santa : "Tom has been reassigned to the nice list!"
+@enduml
