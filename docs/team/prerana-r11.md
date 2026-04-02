@@ -57,8 +57,12 @@ Allows Santa to access saved data(childlist,giftlist and elflist) across all ses
 
 ### Contributions to Team-Based Tasks
 * Set up Google Docs for planning tasks.
+* Helped in documentation of UG and DG.
+* Released JAR files on Github.
+* Helped in testing of implemented commands and reported bugs to fix.
 * Reviewed PRs from teammates
 
 
 ### Review/Mentoring Contributions
 * Helped teammates resolve Git merge conflicts
+* Resolved merge conflicts of team members 

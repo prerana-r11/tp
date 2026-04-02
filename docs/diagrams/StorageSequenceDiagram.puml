@@ -1,25 +1,27 @@
 @startuml
 
-participant ClausControl
+participant "ClausControl" as App
 participant Storage
 participant File
 participant Child
 participant Gift
 participant Elf
-participant Task
+participant ElfTask as Task
 
-ClausControl -> Storage : load()
-activate Storage
-
+App -> Storage : load()
 Storage -> File : readLine()
 
 loop for each line
 
     alt line starts with CHILD
         Storage -> Child : new Child(name, age, location)
-        note right: currentChild = Child\ncurrentElf = null
+        note right
+        currentChild = Child
+        currentElf = null
+        end note
+    end
 
-    else line starts with GIFT
+    alt line starts with GIFT
         Storage -> Gift : new Gift(name)
 
         alt state == PREPARED
@@ -29,23 +31,27 @@ loop for each line
         end
 
         Storage -> Child : addGift(gift)
+    end
 
-    else line starts with ACTION
+    alt line starts with ACTION
         Storage -> Child : addAction(description, severity)
+    end
 
-    else line starts with ELF
+    alt line starts with ELF
         Storage -> Elf : new Elf(name)
-        note right: currentElf = Elf\ncurrentChild = null
+        note right
+        currentElf = Elf
+        currentChild = null
+        end note
+    end
 
-    else line starts with TASK
+    alt line starts with TASK
         Storage -> Task : new Task(description)
         Storage -> Elf : addTask(task)
-
     end
 
 end
 
-Storage --> ClausControl : StorageData(children, elves)
-deactivate Storage
+Storage --> App : StorageData(children, elves)
 
 @enduml

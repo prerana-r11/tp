@@ -194,12 +194,13 @@ Example:
 
 #### Update delivery status: `delivery_status`
 Assigns delivery status of gifts as delivered/undelivered.
-* Format: `delivery_status CHILD_INDEX GIFT_INDEX d/delivery_status `
+* Format: `delivery_status CHILD_INDEX GIFT_INDEX d/[status] `
 * The user inputs the child index, gift index and delivery status. 
 * Assigns delivery status (delivered/undelivered) to a gift in the gift list based on the input child index and gift index. 
 * The index must be a positive integer 1, 2, 3
 Example:
-* `deliver 1 2 delivered`
+* `delivery_status 1 2 d/delivered`
+* `delivery_status 1 1 d/undelivered`
 
 #### View gift list: `giftlist`
 Displays all gifts assigned to children.

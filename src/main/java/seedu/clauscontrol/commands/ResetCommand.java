@@ -10,6 +10,7 @@ public class ResetCommand extends Command {
     @Override
     public String execute() {
         logger.log(Level.INFO, "Initiating full system reset...");
+        isFinalized = false;
         
         if (childList != null) {
             childList.clear();

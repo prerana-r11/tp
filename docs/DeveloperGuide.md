@@ -13,6 +13,47 @@
 | **ChatGPT**                                                                                         | The load() function of Storage class was written with the aid of ChatGPT. <br/> The prepareAdd() and prepareEdit() functions of the Parser class (along with their refactored helpers) were reused from ChatGPT with significant modifications. ChatGPT was also used for trivial debugging.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | **Claude**                                                                                          | The tool was used for trivial debugging of ParserTest class after a merge conflict.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 
+
+
+## Storage Component
+
+**API:** `Storage.java`
+
+#### Overview
+The Storage component is responsible for managing persistent data in ClausControl.
+
+It handles saving and loading of  data such as:
+- Children and their associated gifts and actions
+- Elves and their assigned tasks
+- Todo items
+Data is stored in a file and loaded back into the system when the application starts.
+
+#### Responsibilities
+The Storage component:
+- Saves application data to local device.
+- Loads saved data.
+
+#### Implementation
+The Storage component interacts with the following classes:
+- child
+- gift
+- elf
+- elftask
+- todo
+
+#### Design
+The storage component provides a unified interface (`Storage.java`) that handles the storage related operations.
+
+#### Usage
+- When the application starts, data is loaded from storage.
+- When the user inputs commands,the resulting data changes are saved.
+
+#### Sequence diagram to show control flow
+![StorageSequenceDiagram.png](diagrams/StorageSequenceDiagram.png)
+
+#### Notes
+- Storage is independent of the command execution logic
+
 ## Design & implementation
 
 ### Finalize Feature (Shubhan Gabra)
