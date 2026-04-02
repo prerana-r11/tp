@@ -164,10 +164,7 @@ public class ClausControl {
      *
      * @throws IllegalValueException If an incorrectly formatted command is encountered.
      */
-//    public static void main(String[] args) throws IllegalValueException {
-//        Logger.getLogger("seedu.clauscontrol").setLevel(Level.INFO);
-//        new ClausControl().run();
-//    }
+
     public static void main(String[] args) throws IllegalValueException {
         Logger rootLogger = Logger.getLogger("");
         rootLogger.setLevel(Level.OFF);
