@@ -11,7 +11,7 @@
 | **[iP (author: shrabasti-c)](https://github.com/shrabasti-c/ip)**                       | The structure of class ChildCommand was adapted from the *Command classes of shrabasti-c's iP with some modifications.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | **[GeeksforGeeks JUnit tests](https://www.geeksforgeeks.org/advance-java/unit-testing-of-system-out-println-with-junit/)**                      | The class ClausControlTest was inspired by the JUnit tests on the aforementioned website.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | **ChatGPT**                                                                                         | The load() function of Storage class was written with the aid of ChatGPT. <br/> The prepareAdd() and prepareEdit() functions of the Parser class (along with their refactored helpers) were reused from ChatGPT with significant modifications. ChatGPT was also used for trivial debugging.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| **Claude**                                                                                          | The tool was used for trivial debugging of ParserTest class after a merge conflict.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| **Claude**                                                                                          | The tool was used for trivial debugging of ParserTest class after a merge conflict, and to refine the DG language.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 
 
 
@@ -134,125 +134,245 @@ The aforementioned commands follow a near identical sequence diagram to the Chil
 ### Finalize Feature (Shubhan Gabra)
 
 #### Overview
-The "finalize" command freezes the nice and naughty lists, preventing further
-action changes and enabling gift allocation.
+The `finalize` command freezes the nice and naughty lists, preventing further
+action changes and reassignments, while enabling gift allocation.
 
-#### Implementation
-The finalize feature uses a boolean flag "isFinalized" that is stored in Duke.java.
-This flag is passed to every command via setData() in Command.java.
-When the user types "finalize", FinalizeCommand.execute() returns a success message.
-Duke then detects it via instanceof FinalizeCommand and sets the flag to true.
-
-ActionCommand, GiftCommand and ReassignCommand each check "isFinalized"
-at the start of execute(). Once finalized, action additions and reassignments
-are blocked since the lists are frozen. Gift allocation is also blocked
-before finalization since gifts should only be assigned after the lists are set.
-
-#### Why this way?
-The instanceof approach was chosen to keep each command class simple and focused.
-Other options like passing a mutable wrapper object or using a static field were
-considered but not used as they were less readable or harder to test.
-
+#### Use Case
 Given below is an example usage scenario:
 
-1. Add a child: child n/Tom  
-2. Try adding a gift: gift 1 g/toy: should be blocked  
-3. Add an action: action 1 a/helped grandma s/2  
-4. Finalize: finalize  
-5. Try adding another action: should be blocked  
-6. Add a gift: gift 1 g/toy: should work now
+1. Santa adds children: `child n/Tom`, `child n/Lucy`
+2. Santa records actions: `action 1 a/helped grandma s/2`, `action 2 a/broke window s/-3`
+3. Santa tries to add a gift before finalizing: `gift 1 g/toy`
+    - Expected: Blocked with message to finalize first
+4. Santa finalizes: `finalize`
+    - Expected: Lists are now frozen
+5. Santa tries to add another action: `action 1 a/test s/1`
+    - Expected: Blocked with message
+6. Santa adds a gift: `gift 1 g/toy`
+    - Expected: Gift added successfully
+
+#### Implementation
+The finalize feature uses a boolean flag `isFinalized` stored in `ClausControl.java`.
+This flag is passed to every command via `setData()` in `Command.java`.
+When the user types `finalize`, `FinalizeCommand.execute()` returns a success message.
+`ClausControl` then detects it via `instanceof FinalizeCommand` and sets the flag to `true`.
+
+`ActionCommand`, `GiftCommand` and `ReassignCommand` each check `isFinalized`
+at the start of `execute()`. Once finalized, action additions and reassignments
+are blocked. Gift allocation is also blocked before finalization.
 
 Given below is a sequence diagram showing how the finalize command works.
 
 ![](diagrams/FinalizeSequenceDiagram.png)
 
+**Aspect:** How to detect when finalize is called
+- **Alternative 1 (current choice):** Use `instanceof FinalizeCommand` in `ClausControl.java`
+    - **Pros:** Keeps `FinalizeCommand` simple and focused; no extra coupling between classes
+    - **Cons:** Detection logic lives in the main class rather than the command itself
+
+- **Alternative 2:** Use a static boolean flag in a shared utility class
+    - **Pros:** Accessible anywhere without needing to pass the flag through `setData()`
+    - **Cons:** Static state is harder to test and harder to reset between test runs
+
+**Aspect:** How to pass the finalized state to commands
+- **Alternative 1 (current choice):** Pass `isFinalized` as a parameter in `setData()`
+    - **Pros:** Clean, testable - each command test can set the flag explicitly
+    - **Cons:** All commands must accept and store the flag even if unused
+
+- **Alternative 2:** Use a mutable wrapper object shared across commands
+    - **Pros:** Single source of truth
+    - **Cons:** Less readable, harder to reason about state changes
+
 ### Action Tracking Feature (Shubhan Gabra)
 
 #### Overview
-The "action" command allows Santa to record a good or bad action for a child
+The `action` command allows Santa to record a good or bad action for a child
 with an associated severity score between -5 and 5.
 
+#### Use Case
+Given below is an example usage scenario:
+
+1. Santa adds a child: `child n/Tom`
+2. Santa records a good action: `action 1 a/helped grandma s/2`
+    - Expected: Action recorded, Tom's total score is now 2
+3. Santa records a bad action: `action 1 a/broke window s/-3`
+    - Expected: Action recorded, Tom's total score is now -1
+4. Santa views the naughty list: `naughty`
+    - Expected: Tom appears on the naughty list
+5. Santa tries to add an action after finalize:
+    - Expected: Blocked with error message
+
 #### Implementation
-Each Child object stores two ArrayLists, one for action descriptions and one
-for severity scores. getTotalScore() sums all severities to determine if the
-child is on the nice (score >= 0) or naughty (score < 0) list.
+Each `Child` object stores two parallel `ArrayList`s - one for action descriptions
+and one for severity scores. `getTotalScore()` sums all severities to determine
+if the child is on the nice (score >= 0) or naughty (score < 0) list.
 
-Format: action CHILD_INDEX a/ACTION s/SEVERITY
-
-The following steps occur:
+The following steps occur when adding an action:
 1. Parser extracts the child index, action description and severity.
-2. ActionCommand checks if the lists are finalised. If so, the action is blocked.
-3. The child index is validated.
-4. The action and severity are added to the child via addAction().
+2. `ActionCommand` checks if the lists are finalised. If so, the action is blocked.
+3. The child index is validated against the child list bounds.
+4. The action and severity are added to the child via `addAction()`.
 
-#### Why this way?
-Storing actions and severities in parallel ArrayLists keeps the data simple
-and makes getTotalScore() a straightforward loop. Alternatives like a single
-ArrayList of Action objects were considered but rejected for added complexity.
+Format: `action CHILD_INDEX a/ACTION s/SEVERITY`
 
 Given below is a sequence diagram showing how the action command works.
 
 ![](diagrams/ActionSequenceDiagram.png)
 
+**Aspect:** How to store actions and severities
+- **Alternative 1 (current choice):** Two parallel `ArrayList`s in `Child`
+    - **Pros:** Simple implementation; `getTotalScore()` is a straightforward loop
+    - **Cons:** Must ensure both lists stay in sync; less object-oriented
+
+- **Alternative 2:** A single `ArrayList` of `Action` objects each holding description and severity
+    - **Pros:** More object-oriented; easier to extend with additional fields
+    - **Cons:** Adds an extra class and slightly more complexity
+
+**Aspect:** Where to enforce severity range validation
+- **Alternative 1 (current choice):** Validate in `Parser` before creating the command
+    - **Pros:** Fails fast; no invalid command objects are created
+    - **Cons:** Validation logic is in the parser rather than the domain class
+
+- **Alternative 2:** Validate inside `ActionCommand.execute()`
+    - **Pros:** Keeps parser simpler
+    - **Cons:** Invalid command objects can be created and partially executed
+
 ### Nice and Naughty List Feature (Shubhan Gabra)
 
 #### Overview
-The "nice" and "naughty" commands list all children whose total action score
-is >= 0 or < 0 respectively. Manual overrides via "reassign" take priority
+The `nice` and `naughty` commands list all children whose total action score
+is >= 0 or < 0 respectively. Manual overrides via `reassign` take priority
 over the score-based classification.
 
+#### Use Case
+Given below is an example usage scenario:
+
+1. Santa adds children: `child n/Tom`, `child n/Lucy`
+2. Santa adds actions: `action 1 a/helped grandma s/2`, `action 2 a/broke window s/-3`
+3. Santa views the nice list: `nice`
+    - Expected: Tom appears (score 2)
+4. Santa views the naughty list: `naughty`
+    - Expected: Lucy appears (score -3)
+5. Santa manually reassigns Lucy: `reassign 2 l/nice`
+6. Santa views the nice list again: `nice`
+    - Expected: Both Tom and Lucy appear (override takes priority)
+
 #### Implementation
-Both NiceCommand and NaughtyCommand loop through the childList and call
-isNice() or isNaughty() on each child. These methods check the listAssignment
+Both `NiceCommand` and `NaughtyCommand` loop through the `childList` and call
+`isNice()` or `isNaughty()` on each child. These methods check the `listAssignment`
 field first. If it is not null, the manual override is used. Otherwise the
-total score determines the list.
+total score determines the classification.
+
+Given below is a sequence diagram showing how the nice/naughty commands work.
+
+![](diagrams/NiceNaughtySequenceDiagram.png)
+
+**Aspect:** How to determine a child's list classification
+- **Alternative 1 (current choice):** Check `listAssignment` field first, fall back to score
+    - **Pros:** Clean priority system; override and auto-classification coexist naturally
+    - **Cons:** Two separate code paths to maintain
+
+- **Alternative 2:** Always recompute from score; store override as a score adjustment
+    - **Pros:** Single code path
+    - **Cons:** Loses the semantic distinction between manual override and score-based classification
 
 ### Reassign Feature (Shubhan Gabra)
 
 #### Overview
-The "reassign" command allows Santa to manually override a child's list
+The `reassign` command allows Santa to manually override a child's list
 assignment to either nice or naughty, regardless of their action score.
 Once finalised, reassignment is blocked.
 
-#### Implementation
-ReassignCommand calls setListAssignment() on the child, which sets the
-listAssignment field in Child. This field is checked first in isNice()
-and isNaughty(), so it always takes priority over the computed score.
+#### Use Case
+Given below is an example usage scenario:
 
-Format: reassign CHILD_INDEX l/LIST
+1. Santa adds a child and a bad action: `child n/Tom`, `action 1 a/broke window s/-3`
+2. Santa views the naughty list: `naughty`
+    - Expected: Tom appears
+3. Santa reassigns Tom to nice: `reassign 1 l/nice`
+    - Expected: Tom now appears on the nice list
+4. Santa finalizes: `finalize`
+5. Santa tries to reassign again:
+    - Expected: Blocked with error message
+
+#### Implementation
+`ReassignCommand` calls `setListAssignment()` on the target child, which sets
+the `listAssignment` field in `Child`. This field is checked first in `isNice()`
+and `isNaughty()`, so it always takes priority over the computed score.
+
+Format: `reassign CHILD_INDEX l/LIST`
+
+Given below is a sequence diagram showing how the reassign command works.
+
+![](diagrams/ReassignSequenceDiagram.png)
+
+**Aspect:** How to store the manual override
+- **Alternative 1 (current choice):** Store as a nullable `listAssignment` String in `Child`
+    - **Pros:** null means no override - clean default state with no extra flag needed
+    - **Cons:** String comparison needed; must validate "nice"/"naughty" values
+
+- **Alternative 2:** Use an enum for list assignment state (NICE, NAUGHTY, AUTO)
+    - **Pros:** Type-safe; no invalid string values possible
+    - **Cons:** Slightly more code; AUTO state effectively means the same as null
 
 ### Todo and Reminder Feature (Shubhan Gabra)
 
 #### Overview
-The "todo" command allows Santa to add tasks with deadlines. On startup,
+The `todo` command allows Santa to add tasks with deadlines. On startup,
 any todos due within the next 7 days are automatically shown as reminders.
-Todos are persisted across sessions using TodoStorage.
+Todos are persisted across sessions using `TodoStorage`.
+
+#### Use Case
+Given below is an example usage scenario:
+
+1. Santa adds a todo: `todo d/Buy wrapping paper by/2026-12-20`
+    - Expected: Todo added successfully
+2. Santa views all todos: `todolist`
+    - Expected: Todo listed with deadline
+3. Santa tries to add a todo with a past date: `todo d/Old task by/2020-01-01`
+    - Expected: Blocked with error message
+4. Santa removes a todo: `removetodo 1`
+    - Expected: Todo removed
+5. Santa restarts the app with a todo due within 7 days:
+    - Expected: Reminder shown automatically on startup
 
 #### Implementation
-Each Todo stores a description and a LocalDate deadline. TodoStorage saves
-and loads todos from todos.txt using a pipe-separated format.
+Each `Todo` stores a description and a `LocalDate` deadline. `TodoStorage` saves
+and loads todos from `todos.txt` using a pipe-separated format.
 
 The following steps occur when adding a todo:
 1. Parser extracts the description and deadline from the input.
-2. AddTodoCommand validates the description is not empty.
-3. AddTodoCommand validates the deadline is not in the past.
-4. The todo is added to the todoList and saved via TodoStorage.
+2. `AddTodoCommand` validates that the description is not empty.
+3. `AddTodoCommand` validates that the deadline is not in the past.
+4. The todo is added to `todoList` and saved via `TodoStorage`.
 
-On startup, ClausControl calls showUpcomingTodos() which filters todos
-using isUpcoming(), showing only those due within 7 days.
+On startup, `ClausControl` calls `showUpcomingTodos()` which filters todos
+using `isUpcoming()`, showing only those due within 7 days.
 
-Format: todo d/DESCRIPTION by/YYYY-MM-DD
+Format: `todo d/DESCRIPTION by/YYYY-MM-DD`
 
-#### Why this way?
-LocalDate was chosen over epoch seconds since only date precision is needed.
-A separate TodoStorage file was created to avoid modifying the existing
-Storage class written by another team member.
+Given below is a sequence diagram showing how the todo command works.
 
-**Alternatives considered:**
-- Storing todos in the same data.txt file was rejected to avoid coupling
-  with the existing storage format.
-- Using epoch seconds was rejected as unnecessary since deadlines are
-  date-based, not time-based.
+![](diagrams/TodoSequenceDiagram.png)
+
+**Aspect:** How to store the deadline
+- **Alternative 1 (current choice):** Use `LocalDate`
+    - **Pros:** Only date precision needed for deadlines; clean API for date comparisons
+    - **Cons:** Cannot store time-specific deadlines if needed in future
+
+- **Alternative 2:** Use epoch seconds (long)
+    - **Pros:** Compact storage format
+    - **Cons:** Requires manual conversion for display; unnecessary precision for date-only deadlines
+
+**Aspect:** Where to store todos
+- **Alternative 1 (current choice):** Separate `todos.txt` file via `TodoStorage`
+    - **Pros:** Avoids modifying the existing `Storage` class; clean separation of concerns
+    - **Cons:** Two separate storage files to manage
+
+- **Alternative 2:** Store todos in the same `data.txt` file
+    - **Pros:** Single file for all data
+    - **Cons:** Couples todo storage to the existing format; increases risk of breaking existing storage logic
+```
 
 ### Add Elf Feature (XIAO Yanjing)
 
