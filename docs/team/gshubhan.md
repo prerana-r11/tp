@@ -44,8 +44,9 @@ are shown as reminders on startup.
 
 ### Contributions to the UG
 * Added sections for: `action`, `nice`, `naughty`, `reassign`, `finalize`,
-  `todo`, `todolist`, `removetodo`
-* Added all commands written by me to the Command Summary table
+  `todo`, `todolist`, `removetodo`, `task`, `detask`
+* Added all the above commands to the Command Summary table
+* Reviewed the UG for potential errors
 
 ### Contributions to the DG
 * Added implementation details for: Action Tracking, Nice/Naughty Lists,
@@ -67,3 +68,5 @@ are shown as reminders on startup.
 ### Review/Mentoring Contributions
 * Helped teammates resolve Git merge conflicts
 * Debugging of conflicts/failing CI of other members.
+* Tested every single command in the codebase to find potential errors
+* Reviewed full UG and DG for any errors after draft

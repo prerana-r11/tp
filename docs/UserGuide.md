@@ -146,6 +146,19 @@ Updates the name of an existing Elf identified by their index.
 * Format: `Editelf e/ELF_INDEX n/ELF_NEW_NAME`
 * Example: `Editelf e/1 n/Legolas`
 
+#### Assigning a task to an Elf: `task`
+Assigns a task to an existing Elf.
+
+Format: `task ELF_INDEX t/TASK_DESCRIPTION`  
+Example: `task 1 t/wrap gifts`
+
+#### Removing a task from an Elf: `detask`
+Removes a task from an existing Elf. Due to the sensitive nature of the command, a warning
+is issued wherein the user has to confirm the removal by typing `confirm`.
+
+Format: `detask e/ELF_INDEX t/TASK_INDEX`  
+Example: `detask e/1 t/1`
+
 ### Listing Entities
 
 #### Listing Children: `childlist`
@@ -292,6 +305,8 @@ Stores data in a txt file which allows retrieval of lists upon restarting the ap
 | **Add Elf**                | `elf n/NAME`                                        | `elf n/Dobby`                          |
 | **Remove Elf**             | `rmelf e/INDEX`                                     | `rmelf e/1`                            |
 | **Edit Elf**               | `Editelf e/INDEX n/NEW_NAME`                        | `Editelf e/2 n/Zobby`                  |
+| **Assign Elf Task**        | `task ELF_INDEX t/TASK_DESCRIPTION`                 | `task 1 t/wrap gifts`                  |
+| **Remove Elf Task**        | `detask e/ELF_INDEX t/TASK_INDEX`                   | `detask e/1 t/1`                       |
 | **List Children**          | `childlist`                                         | `childlist`                            |
 | **List Elves**             | `elflist`                                           | `elflist`                              |
 | **Find by Name**           | `find n/NAME`                                       | `find n/James Jake`                    |
