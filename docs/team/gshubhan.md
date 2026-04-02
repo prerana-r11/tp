@@ -58,6 +58,9 @@ are shown as reminders on startup.
 * Reviewed PRs from teammates
 * Updated `Command.java` `setData()` to support the `isFinalized` flag
   used by all team members
+* Led a few project meetings.
+* Contribute to google docs for planning of TP.
+* Help draft UG and DG.
 
 ### Review/Mentoring Contributions
 * Helped teammates resolve Git merge conflicts
