@@ -5,7 +5,7 @@ title: User Guide
 
 ClausControl is a **desktop app for Santa Claus to manage children, gifts, elves and deadlines, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If Santa can type fast, ClausControl can get his management tasks done faster than traditional GUI apps.
 
-* Table of Contents
+## Table of Contents
   {:toc}
 
 --------------------------------------------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ Removes an existing Elf based on their index in the list.
 * Format: `rmelf e/ELF_INDEX`
 * Example: `rmelf e/1`
 
-#### Editing an Elf: `Editelf`
+#### Editing an Elf: `editelf`
 Updates the name of an existing Elf identified by their index.
 * Format: `Editelf e/ELF_INDEX n/ELF_NEW_NAME`
 * Example: `Editelf e/1 n/Legolas`
