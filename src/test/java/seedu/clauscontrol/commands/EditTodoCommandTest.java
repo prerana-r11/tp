@@ -2,15 +2,12 @@ package seedu.clauscontrol.commands;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import seedu.clauscontrol.data.child.Child;
-import seedu.clauscontrol.data.child.Name;
 import seedu.clauscontrol.data.exception.IllegalValueException;
 import seedu.clauscontrol.data.todo.Todo;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //@@author shrabasti-c

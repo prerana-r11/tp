@@ -36,7 +36,6 @@ import seedu.clauscontrol.data.exception.IllegalValueException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 
 /**
@@ -404,8 +403,7 @@ public class Parser {
                 newDescription = token.substring(2).trim();
             } else if (token.startsWith("by/")) {
                 String newDeadlineString = token.substring(3).trim();
-                try
-                {
+                try {
                     newDeadline = LocalDate.parse(newDeadlineString);
                     if (newDeadline.isBefore(LocalDate.now())) {
                         throw new IllegalValueException("Deadline cannot be in the past!");

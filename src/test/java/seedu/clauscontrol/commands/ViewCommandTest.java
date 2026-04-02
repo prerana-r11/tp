@@ -1,6 +1,5 @@
 package seedu.clauscontrol.commands;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seedu.clauscontrol.data.child.Child;
@@ -10,7 +9,9 @@ import seedu.clauscontrol.data.gift.Gift;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //@@author shrabasti-c
 public class ViewCommandTest {
