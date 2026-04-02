@@ -67,7 +67,6 @@ public class ClausControl {
         } catch (IOException e) {
             this.childList = new ArrayList<>();
         }
-        //@@author
         //@@author GShubhan
         try {
             this.todoList = new ArrayList<>(todoStorage.load());
@@ -75,8 +74,8 @@ public class ClausControl {
             this.todoList = new ArrayList<>();
         }
         this.parser = new Parser(todoList);  // initialize AFTER loading todos
+        //@@author
     }
-    //@@author
     //@@author
 
     /**

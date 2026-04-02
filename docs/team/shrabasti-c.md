@@ -46,9 +46,10 @@ Allows Santa to access saved data(childlist,giftlist and elflist) across all ses
 * Contribution to `Storage` class - implemented storage capability for child ages and locations.
 
 ### Contributions to the UG
-* Added sections for: `child`, `edit`, `view`, `delete`, `edittodo`.
-* Added all commands to the Command Summary table.
+* Added sections for: `child`, `edit`, `view`, `delete`, `edittodo`, `bye`.
+* Added all above commands to the Command Summary table.
 * Formatted initial UG Canvas Submission and submitted it.
+* Formatted final UG submission and added common sections: Title, Table of Contents, Features (with Notes).
 
 ### Contributions to the DG
 * Added implementation details for: child feature and other common features.

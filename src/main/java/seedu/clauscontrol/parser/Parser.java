@@ -128,9 +128,9 @@ public class Parser {
             pendingCommand = new ResetCommand();
             throw new IllegalValueException("WARNING: This will wipe ALL data and reset to initial state. " +
                     "Type 'confirm' to proceed.");
-            //@@author
+        //@@author
 
-            //@@author GShubhan
+        //@@author GShubhan
         case "action":
             return prepareAction(arguments);
         case "nice":
@@ -157,9 +157,9 @@ public class Parser {
                 throw new IllegalValueException("Index must be a number! Format: removetodo INDEX");
             }
 
-            //@@author
+        //@@author
 
-            //@@author prerana-r11
+        //@@author prerana-r11
         case "gift":
             return prepareGiftAction(arguments);
         case "degift":
