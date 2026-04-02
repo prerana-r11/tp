@@ -59,6 +59,7 @@ Allows Santa to access saved data(childlist,giftlist and elflist) across all ses
 * Led project meetings.
 * Set up channel for communication.
 * Reviewed and approved PRs from teammates.
+* Set up milestones in GitHub (v1.0 and v2.0) with dates.
 * Set up initial repo structure for this project i.e. packages like command, data, and the main class to be used as boilerplate for the entire team.
 * Set up initial Parser, Command and Claus Control classes (common classes, and ClausControl with additional Logging) with foundational boilerplate used by entire team.
 * Set up TextUi and other output formatting for use of entire team.
