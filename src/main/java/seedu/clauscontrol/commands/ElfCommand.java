@@ -33,7 +33,7 @@ public class ElfCommand extends Command {
         elfList.add(toAdd);
         
         logger.log(Level.INFO, "Elf added successfully.");
-        return String.format(MESSAGE_SUCCESS, toAdd);
+        return String.format(MESSAGE_SUCCESS, toAdd.getName());
     }
 }
 //@@author
