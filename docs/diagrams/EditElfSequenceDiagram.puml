@@ -1,0 +1,42 @@
+@startuml
+skinparam Style strictuml
+skinparam SequenceMessageAlignment center
+
+actor Santa
+participant "Parser" as Parser
+participant "command :EditElfCommand" as EditElfCommand
+participant "elfList" as elfList
+participant "targetElf :Elf" as Elf
+
+Santa -> Parser : "editef 1 Buddy"
+activate Parser
+
+Parser -> Parser : parseCommand("editef 1 Buddy")
+create EditElfCommand
+Parser -> EditElfCommand : new EditElfCommand(1, "Buddy")
+
+Parser -> EditElfCommand : execute()
+activate EditElfCommand
+
+alt elfIndex is invalid
+    EditElfCommand --> Parser : "Error: Invalid Elf index."
+else elfIndex is valid
+    EditElfCommand -> elfList : get(0)
+    elfList --> EditElfCommand : targetElf
+
+    group try [update name]
+        EditElfCommand -> Elf : setName(newName)
+        activate Elf
+        Elf --> EditElfCommand
+        deactivate Elf
+        EditElfCommand --> Parser : MESSAGE_SUCCESS
+    else catch IllegalValueException
+        EditElfCommand --> Parser : "Error: [Exception Message]"
+    end
+end
+
+deactivate EditElfCommand
+Parser --> Santa : "Elf name updated!..."
+deactivate Parser
+
+@enduml

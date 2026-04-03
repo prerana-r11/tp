@@ -1,0 +1,36 @@
+@startuml
+skinparam Style strictuml
+skinparam SequenceMessageAlignment center
+
+actor User
+participant "Parser" as Parser
+participant "ResetCommand" as ResetCommand
+participant "childList" as childList
+participant "elfList" as elfList
+
+User -> Parser : reset
+activate Parser
+
+Parser -> Parser : parseCommand("reset")
+create ResetCommand
+Parser -> ResetCommand : new ResetCommand()
+
+Parser -> ResetCommand : execute()
+activate ResetCommand
+
+ResetCommand -> ResetCommand : execute()
+note over ResetCommand : isFinalized = false
+
+ResetCommand -> childList : clear()
+childList --> ResetCommand
+
+ResetCommand -> elfList : clear()
+elfList --> ResetCommand
+
+ResetCommand --> Parser : ResetCommand
+deactivate ResetCommand
+
+Parser --> User : "ho ho! The system has been fully reset."
+deactivate Parser
+
+@enduml

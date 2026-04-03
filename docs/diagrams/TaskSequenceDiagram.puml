@@ -1,0 +1,46 @@
+@startuml
+skinparam Style strictuml
+skinparam SequenceMessageAlignment center
+
+actor Santa
+participant "Parser" as Parser
+participant "command :TaskCommand" as TaskCommand
+participant "elfList" as elfList
+participant "targetElf :Elf" as Elf
+participant "newTask :ElfTask" as ElfTask
+
+User -> Parser : "task 1 t/Make toys"
+activate Parser
+
+Parser -> Parser : parseCommand("task 1 t/Make toys")
+create TaskCommand
+Parser -> TaskCommand : new TaskCommand(1, "Make toys")
+
+Parser -> TaskCommand : execute()
+activate TaskCommand
+
+TaskCommand -> elfList : size()
+elfList --> TaskCommand : listSize
+
+alt targetIndex is invalid (index < 1 or > size)
+    TaskCommand --> Parser : MESSAGE_INVALID_INDEX
+else targetIndex is valid
+    TaskCommand -> elfList : get(0)
+    elfList --> TaskCommand : targetElf
+
+    create ElfTask
+    TaskCommand -> ElfTask : new ElfTask("Make toys")
+
+    TaskCommand -> Elf : addTask(newTask)
+    activate Elf
+    Elf --> TaskCommand
+    deactivate Elf
+
+    TaskCommand --> Parser : MESSAGE_SUCCESS
+end
+
+deactivate TaskCommand
+Parser --> User : "Ho ho ho! Task [Make toys] assigned..."
+deactivate Parser
+
+@enduml

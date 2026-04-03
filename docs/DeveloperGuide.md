@@ -453,21 +453,300 @@ Given below is a sequence diagram showing how the todo command works.
 - **Alternative 2:** Store todos in the same `data.txt` file
     - **Pros:** Single file for all data
     - **Cons:** Couples todo storage to the existing format; increases risk of breaking existing storage logic
-```
 
-### Add Elf Feature (XIAO Yanjing)
+### Elf Feature (XIAO Yanjing)
 
-#### Overview
-The "elf" command creates an elf entity consisting of its name and task(initialized as null).
+#### Use Case
+Below is a system-wide use case to illustrate the elf profile and its associated actions.
+
+Within the Elf Feature, Santa can interact with the `elf` profile using the following commands: `elf`, `rmelf`, `editelf`, `task`, `detask`, `elflist`.
+These commands can be used to manage elves and their assigned tasks.
+Given below is an example usage scenario:
+
+**Santa, at the beginning of the year, adds elves to his workshop**
+1. elf n/Dobby
+2. elf n/Tinsel
+3. elf n/Jingle
+
+**Santa, later in the year, consults the list of elves and manages them as needed**
+1. elflist
+2. editelf e/2 n/Glitter
+3. rmelf e/3
 
 #### Implementation
-The proposed elf profile is facilitated by Elf Class.
-It implements ReadOnlyElf with a name fetching mechanism, stored internally with a Name class with a reference to a name String input by the user.
-Given below is an example usage scenario and how the add elf mechanism behaves at each step.
-Step 1. The user launches the application for the first time.
-Step 2. The user executes elf n/Buddy to add an elf in the elf list.
+As mentioned earlier, the `elf` command creates an elf entity/profile consisting of its name and an associated task list.
+As the implementation of `elf` is the most complex of its related commands (`elf`, `rmelf`, `editelf`), let us examine the same.
+
+The proposed elf profile is facilitated by the `Elf` Class.
+It implements `ReadOnlyElf` which contains a name fetching and setting mechanism, with the name stored internally via the reused `Name` class from the child package.
+The elf operation must minimally have a name argument; tasks are optional and can be added later.
+Additionally, it implements the following operations:
+* `toAdd()`—adds the elf to the internal elf list.
+* `execute()`—returns a successful operation message.
+  These operations comprise the `ElfCommand` class (which inherits from a base `Command` class).
+  Given below is an example usage scenario and how the add elf mechanism behaves at each step.
+1. The user launches the application for the first time.
+2. The user executes `elf n/Dobby` to add an elf to the elf list.
+3. The Parser parses the command and returns the arguments to a new `ElfCommand`.
+4. Given a valid Name, the `Elf` object is instantiated and returned.
+    * Note: At the point of instantiation, the Name is validated via the reused `Name` class. An incorrect input means the object creation does not proceed.
+5. The `Elf` is added to the Elf List.
+6. The successful message is displayed.
+
+Given below is a sequence diagram showing how the elf command works.
+
+![](diagrams/ElfSequenceDiagram.png)
+
+Given below is a sequence diagram showing how the editelf command works.
+
+![](diagrams/EditElfSequenceDiagram.png)
+
+Given below is a sequence diagram showing how the rmelf command works.
+
+![](diagrams/RmElfSequenceDiagram.png)
 
 
+**Aspect:** How to implement the Elf Profile
+- **Alternative 1 (current choice):** Construct a `ReadOnlyElf` interface which `Elf` implements
+    - **Pros:** Ensures no unintended external mutation of elf data
+    - **Cons:** More lines of code and more complex implementation (extra interface)
+
+- **Alternative 2:** Implement via a Single `Elf` Class
+    - **Pros:** Lesser lines of code and simpler implementation
+    - **Cons:** Higher risk of elf data modification
+
+**Aspect:** How to store the Elf Name
+- **Alternative 1 (current choice):** Reuse the existing `Name` class from the `child` package
+    - **Pros:** Consistent validation logic across the codebase; avoids code duplication
+    - **Cons:** Creates a cross-package dependency between `elf` and `child`
+
+- **Alternative 2:** Store as a `String` in the `Elf` class
+    - **Pros:** Lesser lines of code and no cross-package dependency
+    - **Cons:** No enforced validation and violation of Separation of Concerns
+
+**Aspect:** How to store Elf Tasks
+- **Alternative 1 (current choice):** Store tasks as an `ArrayList<ElfTask>` within `Elf`, with `ElfTask` as a dedicated class
+    - **Pros:** Clean encapsulation; easy to add, retrieve, and delete individual tasks by index
+    - **Cons:** More classes and slightly more complex than a plain String list
+
+- **Alternative 2:** Store tasks as `ArrayList<String>` directly in `Elf`
+    - **Pros:** Simpler implementation with fewer classes
+    - **Cons:** No special constraints on task description; future extension (e.g. task priority) would require significant refactoring
+
+#### Implementation of `rmelf`, `editelf`, `task`, `detask`, and `elflist`
+The aforementioned commands follow a near identical sequence of operations to the `ElfCommand`, differing only in their `execute()` methods:
+
+* `rmelf` — validates the given elf index, retrieves the `Elf` from the elf list, removes it, and returns a success message with the removed elf's name.
+* `editelf` — validates the given elf index, retrieves the target `Elf`, calls `setName()` with a new `Name` object (validated at construction), and returns a success message showing the old and new names.
+* `task` — validates the given elf index, retrieves the target `Elf`, creates a new `ElfTask` from the provided description string, calls `addTask()` on the elf, and returns a success message.
+* `detask` — validates both the elf index and the task index, retrieves the target `Elf` and its task list, calls `deleteTask()` with the zero-based task index, and returns a success message with the removed task description.
+* `elflist` — iterates over all elves in the elf list and builds a formatted string displaying each elf's name and their numbered task list (or a placeholder if no tasks are assigned).
+
+### ElfTask Feature (XIAO Yanjing)
+
+#### Use Case
+
+Within the Task Feature, Santa can assign tasks to elves and remove them using the `task` and `detask` commands.
+Given below is an example usage scenario:
+
+**Santa assigns tasks to elves throughout the year**
+1. task 1 t/wrap gifts
+2. task 1 t/polish sleigh
+3. task 2 t/sort letters
+
+**Santa removes a specific task from an elf when it is no longer needed**
+1. detask e/1 t/2
+
+#### Implementation
+
+The `task` command assigns a task to an existing elf by index. It is facilitated by the `TaskCommand` class (which inherits from the base `Command` class).
+
+Upon construction, `TaskCommand` takes in a 1-based `ELF_INDEX` and a `TASK_DESCRIPTION` string. The `ElfTask` object is created inside `execute()` and immediately added to the target elf's internal `ArrayList<ElfTask>`.
+
+Given below is an example usage scenario and how the assign task mechanism behaves at each step.
+
+1. The user executes `task 1 t/wrap gifts`.
+2. The Parser parses the command and passes the elf index and task description to a new `TaskCommand`.
+3. `execute()` validates the elf index against `elfList`.
+    * If the index is out of range, an error message is returned immediately.
+4. The target `Elf` is retrieved from `elfList`.
+5. A new `ElfTask` is instantiated with the provided description string.
+6. `addTask()` is called on the target `Elf`, appending the `ElfTask` to its internal list.
+7. A success message is returned.
+
+Given below is a sequence diagram showing how the task command works.
+
+![](diagrams/TaskSequenceDiagram.png)
+
+**Aspect:** How to validate the task description
+- **Alternative 1 (current choice):** Store task description as a plain `String` in `ElfTask`, with assertion guards (`taskContent != null`, not empty) in `TaskCommand`
+    - **Pros:** Simple; no special constraints needed for task descriptions
+    - **Cons:** Validation is done at the command level rather than inside `ElfTask` itself
+
+- **Alternative 2:** Introduce a dedicated `TaskDescription` class similar to `Name`
+    - **Pros:** Encapsulates validation logic; consistent with the `Name` pattern
+    - **Cons:** Added complexity for a field with no special formatting constraints
+
+#### Implementation of `detask`
+
+`detask` removes a specific task from an elf by both elf index and task index. It is facilitated by the `DetaskCommand` class.
+
+`execute()` performs two rounds of validation — first checking the elf index against `elfList`, then checking the task index against the target elf's task list. If either check fails, a descriptive error message is returned. On success, `deleteTask()` is called on the target `Elf` with the 0-based task index, and the removed task description is included in the success message.
+
+Given below is a sequence diagram showing how the detask command works.
+
+![](diagrams/DeTaskSequenceDiagram.png)
+---
+
+### Find Feature (XIAO Yanjing)
+
+#### Use Case
+
+Within the Find Feature, Santa can search for children in his list by name, age, or location using the `find` command.
+Given below is an example usage scenario:
+
+**Santa searches for children matching specific criteria**
+1. find n/Bruce
+2. find a/10
+3. find l/Washington
+
+#### Implementation
+
+The `find` command searches the `childList` and returns all matching entries. It is facilitated by the `FindCommand` class (which inherits from the base `Command` class).
+
+`FindCommand` takes in a `query` string and a `SearchType` enum value (`NAME`, `AGE`, or `LOCATION`). The query is normalised to lowercase at construction time. `execute()` iterates over all children in `childList` and evaluates each child against the search type:
+
+* `NAME` — checks if the child's name (lowercased) contains the query string.
+* `AGE` — checks if the child has an age attribute and whether it matches the query exactly.
+* `LOCATION` — checks if the child has a location attribute and whether it contains the query string.
+
+Matching children are collected into a formatted result string. If no matches are found, an appropriate message is returned.
+
+Given below is an example usage scenario and how the find mechanism behaves at each step.
+
+1. The user executes `find n/Bruce`.
+2. The Parser parses the command and passes `"Bruce"` and `SearchType.NAME` to a new `FindCommand`.
+3. `execute()` checks that `childList` is not empty.
+4. The command iterates over each `Child` in `childList`, performing a case-insensitive `contains` check on the child's name.
+5. All matching children are formatted with their index, name, and any optional age/location attributes.
+6. The result string (match count + details) is returned.
+
+Given below is a sequence diagram showing how the find command works.
+
+![](diagrams/FindSequenceDiagram.png)
+
+**Aspect:** How to represent search type
+- **Alternative 1 (current choice):** Use a `SearchType` enum (`NAME`, `AGE`, `LOCATION`) passed into `FindCommand`
+    - **Pros:** Type-safe; easy to extend with new search dimensions; switch-case is exhaustive
+    - **Cons:** Requires the Parser to resolve the prefix (`n/`, `a/`, `l/`) to the correct enum value
+
+- **Alternative 2:** Use separate command classes (`FindByNameCommand`, `FindByAgeCommand`, etc.)
+    - **Pros:** Each class is self-contained with no branching logic
+    - **Cons:** Code duplication; harder to maintain as search logic is identical except for the matching predicate
+
+### List Features (XIAO Yanjing)
+
+#### Use Case
+
+Santa can view all children or all elves (with their tasks) at any time using the `childlist` and `elflist` commands.
+Given below is an example usage scenario:
+
+**Santa consults the lists as needed throughout the year**
+1. childlist
+2. elflist
+
+#### Implementation of `childlist`
+
+The `childlist` command displays all children currently in the system. It is facilitated by the `ChildListCommand` class (which inherits from the base `Command` class).
+
+`execute()` first checks if `childList` is empty and returns an early message if so. Otherwise, it iterates over every `Child` in `childList`, appending each child's string representation (name, age, location, score, list assignment) to a `StringBuilder` with a 1-based index prefix. The assembled string is returned as the command output.
+
+Given below is an example usage scenario and how the list mechanism behaves at each step.
+
+1. The user executes `childlist`.
+2. The Parser parses the command and invokes `ChildListCommand`.
+3. `execute()` checks whether `childList` is empty.
+    * If empty, the message `"The child list is empty!"` is returned immediately.
+4. The command iterates over each `Child` in `childList`, calling `toString()` on each entry.
+5. The formatted list string is returned and displayed to the user.
+
+#### Implementation of `elflist`
+
+The `elflist` command displays all elves and their associated tasks. It is facilitated by the `ElfListCommand` class.
+
+`execute()` mirrors the structure of `ChildListCommand`, but performs a nested iteration: for each `Elf`, it retrieves the elf's `ArrayList<ElfTask>` and appends each task with a nested 1-based index. If an elf has no tasks, a `[No tasks assigned]` placeholder is shown instead.
+
+Given below is an example usage scenario and how the mechanism behaves at each step.
+
+1. The user executes `elflist`.
+2. The Parser parses the command and invokes `ElfListCommand`.
+3. `execute()` checks whether `elfList` is empty.
+    * If empty, the message `"The elf list is empty!"` is returned immediately.
+4. The command iterates over each `Elf` in `elfList`:
+    * The elf's name is appended with a 1-based index.
+    * If the elf has tasks, each task is appended with a nested index under a `Tasks:` label.
+    * If the elf has no tasks, `[No tasks assigned]` is appended instead.
+5. The formatted list string is returned and displayed to the user.
+   
+Given below is a sequence diagram showing how the list(elflist and childlist) command works.
+
+![](diagrams/ElfListSequenceDiagram.png)
+![](diagrams/ChildListSequenceDiagram.png)
+
+**Aspect:** How to handle elves with no tasks
+- **Alternative 1 (current choice):** Display a `[No tasks assigned]` inline placeholder
+    - **Pros:** Always shows all elves regardless of task state; Santa can see the full workshop roster at a glance
+    - **Cons:** Slightly more output when many elves are unassigned
+
+- **Alternative 2:** Only display elves that have at least one task
+    - **Pros:** Shorter output when most elves are idle
+    - **Cons:** Santa cannot identify which elves are unassigned from the list view alone
+
+
+### Reset Feature (XIAO Yanijng)
+
+#### Use Case
+
+Santa can fully reset the system at any time using the `reset` command, clearing all children and elves (along with their associated gifts and tasks).
+Given below is an example usage scenario:
+
+**Santa resets the system at the start of a new year**
+1. reset
+
+#### Implementation
+
+The `reset` command wipes the entire system state. It is facilitated by the `ResetCommand` class (which inherits from the base `Command` class).
+
+`execute()` performs three operations in sequence:
+1. Sets the `isFinalized` flag to `false`, unlocking the system for new additions (reversing any prior `freeze` operation).
+2. Calls `clear()` on `childList` if it is not null, removing all children and their associated data.
+3. Calls `clear()` on `elfList` if it is not null, removing all elves and their associated tasks.
+
+A success message is returned confirming the reset.
+
+Given below is an example usage scenario and how the reset mechanism behaves at each step.
+
+1. The user executes `reset`.
+2. The Parser parses the command and invokes `ResetCommand`.
+3. `execute()` sets `isFinalized` to `false`.
+4. `childList.clear()` is called, removing all child entries.
+5. `elfList.clear()` is called, removing all elf entries.
+6. The success message is returned and displayed to the user.
+
+Given below is a sequence diagram showing how the reset command works.
+
+![](diagrams/ResetSequenceDiagram.png)
+
+**Aspect:** How to handle null lists during reset
+- **Alternative 1 (current choice):** Guard each `clear()` call with a null check
+    - **Pros:** Prevents `NullPointerException` if `reset` is called before either list is initialised
+    - **Cons:** Slight defensive overhead; in normal application flow the lists are always initialised at startup
+
+- **Alternative 2:** Assert both lists are non-null before clearing
+    - **Pros:** Fails fast and loudly if the application state is unexpectedly broken
+    - **Cons:** Less robust in edge cases such as testing or partial initialisation scenarios
+
+```
 ### Add gift feature(Prerana Ravi Shankar)
 
 #### Overview

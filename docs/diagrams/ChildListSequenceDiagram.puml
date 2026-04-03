@@ -1,0 +1,37 @@
+@startuml
+skinparam Style strictuml
+skinparam SequenceMessageAlignment center
+
+actor Santa
+participant Parser
+participant ChildListCommand
+participant childList
+participant Child
+
+Santa -> Parser : childlist
+activate Parser
+Parser -> Parser : parseCommand("childlist")
+create ChildListCommand
+Parser -> ChildListCommand : new ChildListCommand()
+Parser -> ChildListCommand : execute()
+activate ChildListCommand
+
+ResetCommand -> ResetCommand : execute()
+
+alt childList is empty
+    ChildListCommand --> Parser : "The child list is empty."
+else not empty - iterate each Child
+    loop for each Child in childList
+        ChildListCommand -> childList : get(i)
+        childList --> ChildListCommand : Child object
+        ChildListCommand -> Child : toString()
+        Child --> ChildListCommand : child string
+    end
+end
+
+ChildListCommand --> Parser : ChildListCommand
+deactivate ChildListCommand
+Parser --> Santa : "Here are all children: ..."
+deactivate Parser
+
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+skinparam Style strictuml
+skinparam SequenceMessageAlignment center
+
+actor Santa
+participant "Parser" as Parser
+participant "command :RmElfCommand" as RmElfCommand
+participant "elfList" as elfList
+
+Santa -> Parser : "rmelf 1"
+activate Parser
+
+Parser -> Parser : parseCommand("rmelf 1")
+create RmElfCommand
+Parser -> RmElfCommand : new RmElfCommand(1)
+
+Parser -> RmElfCommand : execute()
+activate RmElfCommand
+
+RmElfCommand -> elfList : size()
+elfList --> RmElfCommand : listSize
+
+alt elfIndex is invalid
+    RmElfCommand --> Parser : "Error: Invalid Elf index."
+else elfIndex is valid
+    RmElfCommand -> elfList : get(0)
+    elfList --> RmElfCommand : removedElf
+
+    RmElfCommand -> elfList : remove(0)
+    activate elfList
+    elfList --> RmElfCommand
+    deactivate elfList
+
+    RmElfCommand --> Parser : MESSAGE_SUCCESS
+end
+
+deactivate RmElfCommand
+Parser --> Santa : "Elf removed: Buddy"
+deactivate Parser
+
+@enduml

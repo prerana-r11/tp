@@ -1,0 +1,36 @@
+@startuml
+skinparam Style strictuml
+skinparam SequenceMessageAlignment center
+
+actor Santa
+participant "Parser" as Parser
+participant "command :ElfCommand" as ElfCommand
+participant "toAdd :Elf" as Elf
+participant "elfList" as elfList
+
+Santa -> Parser : "elf Buddy"
+activate Parser
+
+Parser -> Parser : parseCommand("elf Buddy")
+create ElfCommand
+Parser -> ElfCommand : new ElfCommand("Buddy")
+activate ElfCommand
+create Elf
+ElfCommand -> Elf : new Elf(new Name("Buddy"))
+deactivate ElfCommand
+
+Parser -> ElfCommand : execute()
+activate ElfCommand
+
+ElfCommand -> elfList : add(toAdd)
+activate elfList
+elfList --> ElfCommand
+deactivate elfList
+
+ElfCommand --> Parser : MESSAGE_SUCCESS
+deactivate ElfCommand
+
+Parser --> Santa : "Ho ho ho! New elf added: Buddy"
+deactivate Parser
+
+@enduml

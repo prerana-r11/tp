@@ -1,0 +1,52 @@
+@startuml
+skinparam Style strictuml
+skinparam SequenceMessageAlignment center
+
+actor Santa
+participant "Parser" as Parser
+participant "command :FindCommand" as FindCommand
+participant "childList" as childList
+participant "child :Child" as Child
+
+Santa -> Parser : find n/Alice
+activate Parser
+
+Parser -> Parser : parseCommand("find n/Alice")
+create FindCommand
+Parser -> FindCommand : new FindCommand("Alice", NAME)
+
+Parser -> FindCommand : execute()
+activate FindCommand
+
+FindCommand -> childList : isEmpty()
+childList --> FindCommand : false
+
+loop for each Child in childList
+    FindCommand -> childList : get(i)
+    childList --> FindCommand : child
+
+    alt type == NAME
+        FindCommand -> Child : getName()
+        Child --> FindCommand : nameString
+    else type == AGE
+        FindCommand -> Child : hasAge()
+        FindCommand -> Child : getAge()
+    else type == LOCATION
+        FindCommand -> Child : hasLocation()
+        FindCommand -> Child : getLocation()
+    end
+
+    note over FindCommand : check if isMatch
+end
+
+alt count == 0
+    FindCommand --> Parser : "No match found..."
+else count > 0
+    FindCommand --> Parser : "Found X matches:\n..."
+end
+
+deactivate FindCommand
+Parser --> Santa : Display search results
+deactivate Parser
+
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+skinparam Style strictuml
+skinparam SequenceMessageAlignment center
+
+actor Santa
+participant Parser
+participant ElfListCommand
+participant elfList
+participant Elf
+participant ElfTask
+
+Santa -> Parser : elflist
+activate Parser
+Parser -> Parser : parseCommand("elflist")
+create ElfListCommand
+Parser -> ElfListCommand : new ElfListCommand()
+Parser -> ElfListCommand : execute()
+activate ElfListCommand
+
+ResetCommand -> ResetCommand : execute()
+
+alt elfList is empty
+    ElfListCommand --> Parser : "The elf list is empty."
+else not empty - iterate each Elf
+    loop for each Elf in elfList
+        ElfListCommand -> elfList : get(i)
+        elfList --> ElfListCommand : Elf object
+        ElfListCommand -> Elf : getName() / getTasks()
+        Elf --> ElfListCommand : name / task list
+        loop for each ElfTask - calls toString()
+            ElfListCommand -> ElfTask : toString()
+        end
+    end
+end
+
+ElfListCommand --> Parser : ElfListCommand
+deactivate ElfListCommand
+Parser --> Santa : "here are all elves and their tasks: ..."
+deactivate Parser
+
+@enduml
