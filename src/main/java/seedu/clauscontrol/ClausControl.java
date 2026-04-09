@@ -100,20 +100,15 @@ public class ClausControl {
                 command.setData(childList, elfList, isFinalized);
                 //@@author GShubhan
                 String result = command.execute();
-                try {
-                    storage.save(childList, elfList, isFinalized);
-                } catch (IOException e) {
-                    logger.warning("Error saving: " + e.getMessage());
-                }
                 if (command instanceof FinalizeCommand) {
                     isFinalized = true;
                 } else if (command instanceof ResetCommand) {
                     isFinalized = false;
                 }
                 try {
-                    todoStorage.save(todoList);
+                    storage.save(childList, elfList, isFinalized);  // now saves the correct value
                 } catch (IOException e) {
-                    logger.warning("Error saving todos: " + e.getMessage());
+                    logger.warning("Error saving: " + e.getMessage());
                 }
 
                 displayWithDividers(result);
