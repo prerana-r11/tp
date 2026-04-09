@@ -3,9 +3,9 @@ skinparam Style strictuml
 skinparam SequenceMessageAlignment center
 
 actor Santa
-participant "Parser" as Parser
+participant ":Parser" as Parser
 participant "command :EditElfCommand" as EditElfCommand
-participant "elfList" as elfList
+participant ":elfList" as elfList
 participant "targetElf :Elf" as Elf
 
 Santa -> Parser : "editef 1 Buddy"
@@ -22,7 +22,9 @@ opt elfIndex is invalid
     EditElfCommand --> Parser : "Error: Invalid Elf index."
 else elfIndex is valid
     EditElfCommand -> elfList : get(0)
+    activate elfList
     elfList --> EditElfCommand : targetElf
+    deactivate elfList
 
     group try [update name]
         EditElfCommand -> Elf : setName(newName)

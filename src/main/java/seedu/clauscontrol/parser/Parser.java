@@ -104,9 +104,17 @@ public class Parser {
             throw new IllegalValueException("WARNING: You are about to delete a child. Type 'confirm' to proceed.");
 
         case "childlist":
+            if (!arguments.trim().isEmpty()) {
+                throw new IllegalValueException("Unexpected trailing arguments for 'childlist' command. " +
+                        "Try using 'childlist' without any extra text.");
+            }
             return new ChildListCommand();
 
         case "elflist":
+            if (!arguments.trim().isEmpty()) {
+                throw new IllegalValueException("Unexpected trailing arguments for 'elflist' command. " +
+                        "Try using 'elflist' without any extra text.");
+            }
             return new ElfListCommand();
 
         case "find":

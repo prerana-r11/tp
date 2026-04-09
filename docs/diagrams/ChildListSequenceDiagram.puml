@@ -2,36 +2,42 @@
 skinparam Style strictuml
 skinparam SequenceMessageAlignment center
 
-actor Santa
-participant Parser
-participant ChildListCommand
-participant childList
-participant Child
+actor "Santa" as Santa
+participant ":Parser" as Parser
+participant "command:ChildListCommand" as ChildListCommand
+participant "childList:ChildList" as childList
+participant "currentChild:Child" as Child
 
-Santa -> Parser : childlist
+Santa -> Parser : "childlist"
 activate Parser
+
 Parser -> Parser : parseCommand("childlist")
+
 create ChildListCommand
 Parser -> ChildListCommand : new ChildListCommand()
+
 Parser -> ChildListCommand : execute()
 activate ChildListCommand
 
-ResetCommand -> ResetCommand : execute()
-
 opt childList is empty
-    ChildListCommand --> Parser : "The child list is empty."
-else not empty - iterate each Child
+    ChildListCommand --> Parser : "The child list is empty!"
+else childList is not empty
     loop for each Child in childList
         ChildListCommand -> childList : get(i)
-        childList --> ChildListCommand : Child object
+        activate childList
+        childList --> ChildListCommand : currentChild
+        deactivate childList
+
         ChildListCommand -> Child : toString()
-        Child --> ChildListCommand : child string
+        activate Child
+        Child --> ChildListCommand : childString
+        deactivate Child
     end
+    ChildListCommand --> Parser : resultString
+    deactivate ChildListCommand
 end
 
-ChildListCommand --> Parser : ChildListCommand
-deactivate ChildListCommand
-Parser --> Santa : "Here are all children: ..."
+Parser --> Santa : "Here are all children:\n..."
 deactivate Parser
 
 @enduml
