@@ -21,8 +21,17 @@ The bulk of the app’s work is done by the following five components:
 * Data: Responsible for storing relevant entities in ClausControl.
 * Parser: Takes in user input and executes commands.
 * (trivial implementation) Ui: The Ui of the App.
+
+The Architecture Diagram given below explains the high-level design of the App.
   ![ArchitectureDiagram.png](diagrams/ArchitectureDiagram.png)
-  
+
+The Sequence Diagram below shows how the components interact with each other for the scenario where the user issues the command delete 1.
+
+![ArchitectureSequenceDiagram.png](diagrams/ArchitectureSequenceDiagram.png)
+
+It should be noted that the components Main and Data are representative in nature.
+The Main component refers to the ClausControl.java class and the Data component refers to packages in our project representing different entities.
+They have grouped under Main and Data to reflect the architecture of the project.
 The sections below give more details of the major components.
 
 ## Storage Component
