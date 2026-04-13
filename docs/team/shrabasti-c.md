@@ -1,8 +1,8 @@
-# Chakraborty Shrabasti - Project Portfolio Page
+# Chakraborty Shrabasti's Project Portfolio Page
 
 ## Overview
-ClausControl is a desktop application for Santa Claus to manage children,
-gifts and elves, optimized for use via a Command Line Interface (CLI).
+ClausControl is a desktop application for Santa Claus to manage children, gifts, elves and tasks, optimized for use via a Command Line Interface (CLI).
+It is written in Java, and has about 8200 LoC.
 
 ### Summary of Contributions
 ### Code Contributed
