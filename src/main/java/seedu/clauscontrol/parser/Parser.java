@@ -327,7 +327,7 @@ public class Parser {
      * Converts the age string to an integer and validates it.
      *
      * @param ageString the string representation of age
-     * @param age       the default age value
+     * @param age the default age value
      * @return the validated age as an integer
      * @throws IllegalValueException if ageString is not a valid non-negative integer
      */
@@ -337,6 +337,9 @@ public class Parser {
                 age = Integer.parseInt(ageString);
                 if (age < 0) {
                     throw new IllegalValueException("Oops! Age must be non-negative");
+                }
+                if (age > 18) {
+                    throw new IllegalValueException("Oops! Age must be an integer between 0 to 18");
                 }
             } catch (NumberFormatException e) {
                 throw new IllegalValueException("Oops! Age must be a valid number within range");
