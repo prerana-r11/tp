@@ -5,7 +5,6 @@ ClausControl is a desktop application for Santa Claus to manage children,
 gifts and elves, optimized for use via a Command Line Interface (CLI).
 
 ## Summary of Contributions
-
 ### Code Contributed
 [Link to code dashboard](https://nus-cs2113-ay2526-s2.github.io/tp-dashboard/?search=&sort=groupTitle&sortWithin=title&timeframe=commit&mergegroup=&groupSelect=groupByRepos&breakdown=true&checkedFileTypes=docs~functional-code~test-code~other&since=2026-02-20T00%3A00%3A00&filteredFileName=&tabOpen=true&tabType=authorship&tabAuthor=prerana-r11&tabRepo=AY2526S2-CS2113-T09-2%2Ftp%5Bmaster%5D&authorshipIsMergeGroup=false&authorshipFileTypes=docs~functional-code~test-code~other&authorshipIsBinaryFileTypeChecked=false&authorshipIsIgnoredFilesChecked=false)
 
@@ -37,14 +36,14 @@ Provides the functionality to delete a specific task from a chosen elf's assignm
 * Ensures that the task description is captured before deletion so the user receives a confirmation of exactly what was removed
 
 #### 6. Find a child by his/her name/location/age (`find` command)
-Allows Santa to search for specific children in the list using various criteria such as name, age, or location.
+Allows Santa to search for specific children in the list using name, age, or location.
 * Implemented `FindCommand` with a `SearchType` enum to handle different search parameters.
 * Provides detailed feedback including the child's index, name, age, and location for all matches found.
 
 #### 7. View elf feature (`elflist` command)
-Allows Santa to view a comprehensive list of all elves currently in the system along with their assigned tasks.
+Allows Santa to view a list of all elves currently in the system with their assigned tasks.
 * Implemented via the `ElfListCommand` class, which iterates through the `elfList` to build a detailed string representation.
-* Uses a `StringBuilder` to efficiently format the output, ensuring a clear hierarchical view of elves and their corresponding tasks.
+* Uses a `StringBuilder` to efficiently format the output, ensuring a clear hierarchical view of elves and their tasks.
 
 #### 8. View child feature (`childlist` command)
 Allows Santa to view a complete, numbered list of all children currently stored in the system.
@@ -52,7 +51,7 @@ Allows Santa to view a complete, numbered list of all children currently stored 
 * Serves as a quick reference for Santa to see the overall status of all registered children.
 
 #### 9. System Reset feature (`reset` command)
-Allows Santa to completely wipe all data and start fresh, clearing all children, elves, and tasks in one go.
+Allows Santa to completely wipe all data, clearing all children, elves, todos and tasks.
 * Implemented `ResetCommand` to perform a deep clean of both the `childList` and `elfList` simultaneously.
 * Added logic to reset the system's finalization status, giving Santa a blank slate for the next holiday season.
 
