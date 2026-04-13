@@ -22,6 +22,7 @@ class Child {
   - location : String
   - actions : ArrayList<String>
   - severities : ArrayList<Integer>
+  - listAssignment : String
 }
 
 class Gift {
