@@ -683,6 +683,10 @@ public class Parser {
     private Command preparePreparedAction(String args) throws IllegalValueException {
         try {
             String[] parts = args.trim().split(" ");
+            if (parts.length < 2) {
+                throw new IllegalValueException("Format: " +
+                        "prepared [childindex] [giftindex]");
+            }
             int childIndex = Integer.parseInt(parts[0]);
             int giftIndex = Integer.parseInt(parts[1]);
 

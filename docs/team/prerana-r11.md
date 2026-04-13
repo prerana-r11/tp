@@ -30,7 +30,7 @@ Allows Santa to set a gift as delivered or undelivered.
 * Supports both d/delivered and d/undelivered status.
 * Prevents redundant assignment for gifts already in desired status.
 * Possible errors are handled.
-* * Both child and gift index are validated.
+* Both child and gift index are validated.
 
 #### 4. Prepare gift Feature (`prepared` command)
 Allows Santa to mark a gift which is not delivered yet as prepared.
