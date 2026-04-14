@@ -241,6 +241,9 @@ public class Parser {
         case "delivery_status":
             return prepareDeliverAction(arguments);
         case "giftlist":
+            if(!arguments.trim().isEmpty()){
+                throw new IllegalValueException("Invalid format, please follow the format: giftlist");
+            }
             return new GiftListCommand();
         case "prepared":
             return preparePreparedAction(arguments);
