@@ -1,6 +1,10 @@
 FINALIZED|false
-CHILD|ava||-1|-1
-CHILD|ava||5|-1
+CHILDLIST|jerry
+CHILDLIST|ava
+CHILDLIST|tom
+CHILD|jerry|singapore|-1|null
+CHILD|ava||5|null
+CHILD|tom||-1|null
 ELF|Bobby
 ELF|Dobby
 TASK|Buy Ccandy

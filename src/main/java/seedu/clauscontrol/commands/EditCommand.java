@@ -53,10 +53,7 @@ public class EditCommand extends Command {
                 child.setAge(newAge);
                 finalString.append(ageChanged).append(newAge);
             }
-            else{
-                throw new IllegalValueException("Please use correct format: edit CHILD_INDEX " +
-                        "[n/name] [l/location] [a/action]");
-            }
+
         } catch (IllegalValueException e) {
             return e.getMessage();
         }

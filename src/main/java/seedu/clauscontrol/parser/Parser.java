@@ -460,7 +460,11 @@ public class Parser {
 
         newAge = assignAge(ageString, newAge);
 
+        if (newName == null && newLocation == null && newAge == -1) {
+            throw new IllegalValueException("Nothing to edit! Provide n/, l/ or a/");
+        }
         return new EditCommand(index, newName, newLocation, newAge);
+
     }
     //@@author
 
