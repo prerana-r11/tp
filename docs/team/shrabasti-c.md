@@ -44,31 +44,19 @@ Given below are my contributions to the project.
         * Formatted final UG submission and added common sections: Title, Table of Contents, Features (with Notes) for v1.0 release.
         * Carried out basic formatting of whole team's parts [A significant endeavor - Estimated 2 hours extra contribution w.r.t. team] for all releases (v1.0, v2.0, v2.0.1, v2.1) of User Guide.
     
-    * Developer Guide: The following sections of the DG and their corresponding diagrams were written by shrabasti-c.
-        * Acknowledgements
-        * Architecture [under Heading **Design**] [+2 diagrams in the section - 1 architecture, 1 sequence]
-        * Data Component [+1 class diagram in the section]
-        * Child Feature [+1 sequence diagram in the section]
+    * Developer Guide:
+        * The following sections of the DG were written by the author: Acknowledgements, Architecture, Data Component, Child Feature.
+        * The following diagrams can be attributed to the author: Sequence and Architecture Diagrams of Architecture section, Class Diagram of Data Component, and Sequence Diagram of Child Feature.
 
 
 * **Contributions to Team-Based Tasks**:
-    * Set up GitHub repository (current maintainer).
-    * Led project meetings.
-    * Set up channel for communication.
-    * Reviewed and approved PRs from teammates.
-    * Configured majority of AboutUs deliverable.
-    * Set up milestones in GitHub (v1.0, v2.0, etc.) with dates.
-    * Set up initial directory structure and base common classes for this project i.e. 
-        * Justification: This formed the baseline skeleton following which everyone could work on their features independently while maintaining separation of responsibilities.
-        * Contribution: 
-          * Refactored packages like command, data, and the main class to be used as boilerplate for the entire team. 
-          * Set up initial Parser, Command and Claus Control classes (common classes, and ClausControl with additional Logging) with foundational boilerplate used by entire team. 
-          * Set up TextUi and other output formatting for use of entire team.
+    * The author set up the team GitHub repository (is the current maintainer), led project meetings, set up the channel for communication, reviewed and approved PRs from teammates, configured the majority of the AboutUs deliverable, and set up milestones in GitHub (v1.0, v2.0, etc.) with dates.
+    * Additionally, the author set up initial directory structure and base common classes for this project.
+        * Justification: This formed the baseline skeleton for use of entire team.
+        * Contribution: The author refactored packages like command, data, and the main class, set up initial Parser, Command and Claus Control classes (with additional Logging), and set up TextUi and other output formatting.
         * Credits: Code reused from AddressBook-Level2 and shrabasti-c's iP. [refer DG and relevant parts of code for details and extent]
 
 
 * **Review/Mentoring Contributions**:
-    * Resolved majority of Git merge conflicts of team. 
-    * Debugging of conflicts/failing CI of other members.
-    * Debugging of other team's tP during PE-D [Bugs found: 10, above the PE average].
-    * Provided helpful advice regarding use of PlantUML to team.
+    * The author resolved majority of Git merge conflicts of team and provided helpful advice regarding use of PlantUML.
+    * The author also debugged conflicts/failing CI of other members and debugged another team's tP during the PE-D [Bugs found: 10, above the PE average].

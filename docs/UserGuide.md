@@ -64,7 +64,7 @@ Edits an existing child in the system.
 
 Examples:
 * `edit 1 n/Eddie Brock` Edits the name of the 1st child to be Eddie Brock.
-* `edit 2 l/Manhattan a/30` Edits the location and age of the 2nd child to be Manhattan and 30 respectively.
+* `edit 2 l/Manhattan a/3` Edits the location and age of the 2nd child to be Manhattan and 30 respectively.
 
 #### Viewing a child: `view`
 Displays the attributes of an existing child in the system.
@@ -94,12 +94,31 @@ Records a good or bad action for a child with a severity score.
 
 * Format: `action CHILD_INDEX a/ACTION s/SEVERITY`
 * SEVERITY must be an integer between -5 and 5
-* Positive severity = good action, Negative severity = bad action
+* Positive severity = good action, increases the child's score
+* Negative severity = bad action, decreases the child's score
+* Severity 0 is allowed but has no effect on the child's score or list classification.
+  A warning will be shown as a reminder.
+* Action description cannot be empty
 * Cannot add actions after `finalize` has been called
 
 Examples:
 * `action 1 a/helped grandma s/2`
 * `action 2 a/broke window s/-3`
+
+#### Editing an action: `editaction`
+Edits the description or severity of an existing action for a child.
+
+* Format: `editaction CHILD_INDEX ACTION_INDEX [a/NEW_DESCRIPTION] [s/NEW_SEVERITY]`
+* At least one of `a/` or `s/` must be provided
+* Action index refers to the position shown in `view CHILD_INDEX`
+* Cannot edit actions after `finalize` has been called
+* New description cannot be empty
+* New severity must be an integer between -5 and 5
+
+Examples:
+* `editaction 1 2 a/helped neighbour` - updates description of child 1's 2nd action
+* `editaction 1 2 s/3` - updates severity only
+* `editaction 1 2 a/did homework s/4` - updates both
 
 ### Nice and Naughty Lists
 
@@ -134,6 +153,12 @@ Freezes the nice and naughty lists. Once finalized:
 * Gift allocation is now enabled
 
 * Format: `finalize` or `finalise`
+
+#### Unfinalizing the lists: `unfinalize`
+Reverses a previous finalize, re-enabling actions and reassignments.
+Note: Gift operations are blocked again until you finalize once more.
+
+* Format: `unfinalize` or `unfinalise`
 
 ### Elf Management
 
@@ -270,7 +295,9 @@ Todos due within the next 7 days are shown as reminders on startup.
 
 * Format: `todo d/DESCRIPTION by/YYYY-MM-DD`
 * Deadline must not be in the past
+* Deadline must be a real date (e.g. `2026-02-30` is rejected as February 30 does not exist)
 * Description cannot be empty
+* Duplicate todos with the same description and deadline are not allowed
 
 Examples:
 * `todo d/Buy wrapping paper by/2026-12-20`
@@ -311,6 +338,11 @@ Exits the application.
 
 * Format: `bye`
 
+#### Help Command: `help`
+Displays a summary of all available commands and their formats.
+
+* Format: `help`
+
 
 #### Storage
 Stores data in a txt file which allows retrieval of lists upon restarting the application.
@@ -323,35 +355,39 @@ Stores data in a txt file which allows retrieval of lists upon restarting the ap
 
 ## Command Summary
 
-| Action                     | Format                                            | Example                                 |
-|:---------------------------|:--------------------------------------------------|:----------------------------------------|
-| **Add Child**              | `child n/NAME [l/LOCATION] [a/AGE]`               | `child n/Peter Parker a/16 l/New York`  |
-| **Edit Child**             | `edit CHILD_INDEX [n/NAME] [l/LOCATION] [a/AGE]`  | `edit 1 n/Eddie Brock`                  |
-| **View Child**             | `view CHILD_INDEX`                                | `view 1`                                |
-| **Delete Child**           | `delete CHILD_INDEX`                              | `delete 1`                              |
-| **Add action**             | `action CHILD_INDEX a/ACTION s/SEVERITY`          | `action 1 a/helped grandma s/2`         |
-| **View nice list**         | `nice`                                            | `nice`                                  |
-| **View naughty list**      | `naughty`                                         | `naughty`                               |
-| **Reassign child**         | `reassign CHILD_INDEX l/LIST`                     | `reassign 1 l/nice`                     |
-| **Finalize lists**         | `finalize`                                        | `finalize`                              |
-| **Add Elf**                | `elf n/NAME`                                      | `elf n/Dobby`                           |
-| **Remove Elf**             | `rmelf e/INDEX`                                   | `rmelf e/1`                             |
-| **Edit Elf**               | `editelf e/INDEX n/NEW_NAME`                      | `editelf e/2 n/Zobby`                   |
-| **Assign Elf Task**        | `task ELF_INDEX t/TASK_DESCRIPTION`               | `task 1 t/wrap gifts`                   |
-| **Remove Elf Task**        | `detask e/ELF_INDEX t/TASK_INDEX`                 | `detask e/1 t/1`                        |
-| **List Children**          | `childlist`                                       | `childlist`                             |
-| **List Elves**             | `elflist`                                         | `elflist`                               |
-| **Find by Name**           | `find n/NAME`                                     | `find n/James Jake`                     |
-| **Find by Age**            | `find a/AGE`                                      | `find a/11`                             |
-| **Find by Location**       | `find l/LOCATION`                                 | `find l/Singapore`                      |
-| **Add Gift**               | `gift CHILD_INDEX g/GIFT..`                       | `gift 1 g/toy`                          |
-| **Remove gift**            | `degift CHILD_INDEX GIFT_INDEX`                   | `degift 1 2`                            |
-| **Update delivery status** | `delivery_status CHILD_INDEX GIFT_INDEX d/status` | `delivery_status 1 2 d/delivered`       |
-| **Mark prepared gift**     | `prepared CHILD_INDEX GIFT_INDEX`                 | `prepared 1 2`                          |
-| **View giftlist**          | `giftlist`                                        | `giftlist`                              |
-| **Add todo**               | `todo d/DESCRIPTION by/YYYY-MM-DD`                | `todo d/Buy gifts by/2026-12-20`        |
-| **Edit todo**              | `edittodo INDEX [d/DESCRIPTION] [by/YYYY-MM-DD]`  | `edittodo 1 d/Wrap gifts by/2026-12-22` |
-| **View todos**             | `todolist`                                        | `todolist`                              |
-| **Remove todo**            | `removetodo INDEX`                                | `removetodo 1`                          |
-| **Reset Application**      | `reset`                                           | `reset`                                 |
-| **Exit Application**       | `bye`                                             | `bye`                                   |
+| Action                     | Format                                                              | Example                                          |
+|:---------------------------|:--------------------------------------------------------------------|:-------------------------------------------------|
+| **Add Child**              | `child n/NAME [l/LOCATION] [a/AGE]`                                 | `child n/Peter Parker a/16 l/New York`           |
+| **Edit Child**             | `edit CHILD_INDEX [n/NAME] [l/LOCATION] [a/AGE]`                    | `edit 1 n/Eddie Brock`                           |
+| **View Child**             | `view CHILD_INDEX`                                                  | `view 1`                                         |
+| **Delete Child**           | `delete CHILD_INDEX`                                                | `delete 1`                                       |
+| **Add action**             | `action CHILD_INDEX a/ACTION s/SEVERITY`                            | `action 1 a/helped grandma s/2`                  |
+| **View nice list**         | `nice`                                                              | `nice`                                           |
+| **View naughty list**      | `naughty`                                                           | `naughty`                                        |
+| **Reassign child**         | `reassign CHILD_INDEX l/LIST`                                       | `reassign 1 l/nice`                              |
+| **Finalize lists**         | `finalize`                                                          | `finalize`                                       |
+| **Add Elf**                | `elf n/NAME`                                                        | `elf n/Dobby`                                    |
+| **Remove Elf**             | `rmelf e/INDEX`                                                     | `rmelf e/1`                                      |
+| **Edit Elf**               | `editelf e/INDEX n/NEW_NAME`                                        | `editelf e/2 n/Zobby`                            |
+| **Assign Elf Task**        | `task ELF_INDEX t/TASK_DESCRIPTION`                                 | `task 1 t/wrap gifts`                            |
+| **Remove Elf Task**        | `detask e/ELF_INDEX t/TASK_INDEX`                                   | `detask e/1 t/1`                                 |
+| **List Children**          | `childlist`                                                         | `childlist`                                      |
+| **List Elves**             | `elflist`                                                           | `elflist`                                        |
+| **Find by Name**           | `find n/NAME`                                                       | `find n/James Jake`                              |
+| **Find by Age**            | `find a/AGE`                                                        | `find a/11`                                      |
+| **Find by Location**       | `find l/LOCATION`                                                   | `find l/Singapore`                               |
+| **Add Gift**               | `gift CHILD_INDEX g/GIFT..`                                         | `gift 1 g/toy`                                   |
+| **Remove gift**            | `degift CHILD_INDEX GIFT_INDEX`                                     | `degift 1 2`                                     |
+| **Update delivery status** | `delivery_status CHILD_INDEX GIFT_INDEX d/status`                   | `delivery_status 1 2 d/delivered`                |
+| **Mark prepared gift**     | `prepared CHILD_INDEX GIFT_INDEX`                                   | `prepared 1 2`                                   |
+| **View giftlist**          | `giftlist`                                                          | `giftlist`                                       |
+| **Add todo**               | `todo d/DESCRIPTION by/YYYY-MM-DD`                                  | `todo d/Buy gifts by/2026-12-20`                 |
+| **Edit todo**              | `edittodo INDEX [d/DESCRIPTION] [by/YYYY-MM-DD]`                    | `edittodo 1 d/Wrap gifts by/2026-12-22`          |
+| **View todos**             | `todolist`                                                          | `todolist`                                       |
+| **Remove todo**            | `removetodo INDEX`                                                  | `removetodo 1`                                   |
+| **Unfinalize lists**       | `unfinalize`                                                        | `unfinalize`                                     |
+| **Edit action**            | `editaction CHILD_INDEX ACTION_INDEX [a/DESC] [s/SEVERITY]`         | `editaction 1 2 a/helped neighbour s/3`          |
+| **Help**                   | `help`                                                              | `help`                                           |
+| **Reset Application**      | `reset`                                                             | `reset`                                          |
+| **Exit Application**       | `bye`                                                               | `bye`                                            |
+| **Edit action**            | `editaction CHILD_INDEX ACTION_INDEX [a/DESC] [s/SEVERITY]`         | `editaction 1 2 a/helped neighbour s/3`          |
