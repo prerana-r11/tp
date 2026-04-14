@@ -32,6 +32,7 @@ import seedu.clauscontrol.data.child.Child;
 import seedu.clauscontrol.data.todo.Todo;
 import seedu.clauscontrol.commands.RemoveTodoCommand;
 import seedu.clauscontrol.commands.HelpCommand;
+import seedu.clauscontrol.commands.EditActionCommand;
 
 
 import seedu.clauscontrol.data.exception.IllegalValueException;
@@ -164,6 +165,8 @@ public class Parser {
         //@@author
 
         //@@author GShubhan
+        case "editaction":
+            return prepareEditAction(arguments);
         case "action":
             return prepareAction(arguments);
         case "nice":
@@ -902,6 +905,62 @@ public class Parser {
             throw new IllegalValueException("The Elf index must be a valid integer.");
         }
     }
+    //@@author GShubhan
+    private Command prepareEditAction(String args) throws IllegalValueException {
+        try {
+            String[] parts = args.trim().split(" ", 2);
+            if (parts.length < 2) {
+                throw new IllegalValueException(
+                        "Format: editaction CHILD_INDEX ACTION_INDEX [a/NEW_DESC] [s/NEW_SEVERITY]");
+            }
+
+            int childIndex = Integer.parseInt(parts[0]);
+            String remaining = parts[1];
+
+            // extract action index (first token before any prefix)
+            String[] remainParts = remaining.trim().split(" ", 2);
+            int actionIndex = Integer.parseInt(remainParts[0]);
+
+            String newDescription = null;
+            Integer newSeverity = null;
+
+            if (remainParts.length > 1) {
+                String params = remainParts[1];
+                int aIdx = params.indexOf("a/");
+                int sIdx = params.indexOf("s/");
+
+                if (aIdx != -1) {
+                    int end = (sIdx != -1 && sIdx > aIdx) ? sIdx : params.length();
+                    newDescription = params.substring(aIdx + 2, end).trim();
+                    hasNoPipe(newDescription);
+                    if (newDescription.isEmpty()) {
+                        throw new IllegalValueException("Action description cannot be empty!");
+                    }
+                }
+                if (sIdx != -1) {
+                    String sevStr = params.substring(sIdx + 2).trim();
+                    newSeverity = Integer.parseInt(sevStr);
+                    if (newSeverity < -5 || newSeverity > 5) {
+                        throw new IllegalValueException("Severity must be between -5 and 5!");
+                    }
+                }
+            }
+
+            if (newDescription == null && newSeverity == null) {
+                throw new IllegalValueException(
+                        "Provide at least one of a/NEW_DESC or s/NEW_SEVERITY to edit.");
+            }
+
+            return new EditActionCommand(childIndex, actionIndex, newDescription, newSeverity);
+
+        } catch (IllegalValueException e) {
+            throw e;
+        } catch (NumberFormatException e) {
+            throw new IllegalValueException(
+                    "Format: editaction CHILD_INDEX ACTION_INDEX [a/NEW_DESC] [s/NEW_SEVERITY]");
+        }
+    }
+    //@@author
 
     private Command prepareRmElf(String args) throws IllegalValueException {
         String trimmedArgs = args.trim();

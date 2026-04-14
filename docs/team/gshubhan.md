@@ -42,19 +42,53 @@ are shown as reminders on startup.
 * Implemented `TodoStorage` for persistent storage across sessions
 * Implemented `showUpcomingTodos()` in `ClausControl` for startup reminders
 
+#### 6. Bug Fixes and Input Validation 
+Addressed multiple issues raised during PE-D:
+
+* **Input validation fixes:**
+  - Fixed misleading error message for non-existent dates (e.g. `2026-02-30`) in `AddTodoCommand`
+    by separating format validation (regex check) from value validation (`LocalDate.parse()`).
+  - Added empty action description check in `Parser.prepareAction()`.
+  - Added duplicate todo detection in `AddTodoCommand` to reject todos with identical description
+    and deadline.
+
+* **Help command:**
+  - Implemented `HelpCommand` to display a categorized summary of all available commands.
+  - Registered `help` case in `Parser`.
+  - Updated unknown command error message to hint users toward `help`.
+
+* **Unfinalize command:**
+  - Implemented `UnfinalizeCommand` to allow Santa to reverse a finalization.
+  - Added `unfinalize`/`unfinalise` cases in `Parser`.
+  - Updated `ClausControl.runCommandLoopUntilExitCommand()` to flip `isFinalized` back to `false`
+    when `UnfinalizeCommand` succeeds.
+
+* **Zero severity warning:**
+  - Added `SUCCESS_ZERO_SEVERITY` constant in `ActionCommand`.
+  - When severity is exactly 0, the success message includes a note that the action has no effect
+    on the child's score.
+
+#### 7. Edit Action Feature (`editaction` command)
+Allows Santa to correct a previously recorded action's description or severity without
+having to delete and re-enter the entire child profile.
+* Implemented `EditActionCommand` with in-place `ArrayList.set()` updates
+* Added `prepareEditAction()` in `Parser`
+* Validates that at least one of description or severity is provided, that neither is empty or
+  out of range, and that editing is blocked after finalization
+
 ### Contributions to the UG
 * Added sections for: `action`, `nice`, `naughty`, `reassign`, `finalize`,
-  `todo`, `todolist`, `removetodo`, `task`, `detask`
+  `todo`, `todolist`, `removetodo`, `task`, `detask`, `editaction`.
 * Added all the above commands to the Command Summary table
 * Reviewed the UG for potential errors
 
 ### Contributions to the DG
 * Added implementation details for: Action Tracking, Nice/Naughty Lists,
-  Reassign, Finalize and Todo features
+  Reassign, Finalize, editaction and Todo features
 * Added all appendices for the DG.
 * Added sequence diagram for the Finalize feature
 * Added sequence diagram for the Action command
-
+* Added manual testing cases for a lot of commands.
 
 ### Contributions to Team-Based Tasks
 * Set up team meeting on MS teams

@@ -304,6 +304,19 @@ Given below is a sequence diagram showing how the finalize command works.
     - **Pros:** Single source of truth
     - **Cons:** Less readable, harder to reason about state changes
 
+### Unfinalize Feature
+
+#### Overview
+The `unfinalize` command reverses a prior finalize, re-enabling action additions
+and reassignments. Gift operations are blocked again until the lists are finalized.
+
+#### Implementation
+`UnfinalizeCommand.execute()` checks `isFinalized`. If false, it returns an error.
+Otherwise it returns a success message. `ClausControl` detects it via
+`instanceof UnfinalizeCommand && isFinalized` and sets the flag to `false`.
+
+Format: `unfinalize` or `unfinalise`
+
 ### Action Tracking Feature
 
 #### Overview
@@ -337,6 +350,15 @@ The following steps occur when adding an action:
 
 Format: `action CHILD_INDEX a/ACTION s/SEVERITY`
 
+The following steps occur when editing an action:
+1. Parser extracts the child index, action index, and optional new description and/or severity.
+2. `EditActionCommand` checks if the lists are finalised. If so, the edit is blocked.
+3. The child and action indices are validated against their respective list bounds.
+4. The description and/or severity at the given index are updated in-place via `set()` on the `ArrayList`.
+5. A success message reflecting the updated values is returned.
+
+Format: `editaction CHILD_INDEX ACTION_INDEX [a/NEW_DESCRIPTION] [s/NEW_SEVERITY]`
+
 Given below is a sequence diagram showing how the action command works.
 
 ![](diagrams/ActionSequenceDiagram.png)
@@ -367,6 +389,15 @@ Given below is a sequence diagram showing how the action command works.
 - **Alternative 2:** Reject severity 0 as invalid input
     - **Pros:** Prevents meaningless data entry
     - **Cons:** Overly strict; 0 is within the documented range and blocking it would surprise users
+
+**Aspect:** How to implement action editing
+- **Alternative 1 (current choice):** Edit in-place via `ArrayList.set()` on the existing parallel lists
+    - **Pros:** No new data structures needed; consistent with the existing parallel-list design
+    - **Cons:** Still tied to the parallel-list approach; both lists must remain in sync
+
+- **Alternative 2:** Remove the old action and insert a new one at the same index
+    - **Pros:** Reuses existing `addAction()` logic
+    - **Cons:** More steps; index management is error-prone during remove-then-insert
 
 ### Nice and Naughty List Feature
 
@@ -999,6 +1030,16 @@ Given below is the sequence diagram.
     - **Pros:** Provides a complete overview of all children details.
     - **Cons:** Output may look messy.
 
+### Help Feature
+
+#### Overview
+The `help` command displays a formatted list of all available commands grouped
+by category, including their formats and a brief description of each.
+
+#### Implementation
+`HelpCommand.execute()` returns a static `HELP_TEXT` string constant defined
+within the class. No data access is required. The Parser routes the `help`
+keyword directly to a new `HelpCommand` instance.
 
 ## Documentation, logging, testing, configuration, dev-ops
 
@@ -1247,6 +1288,18 @@ Given below are instructions to test the app manually.
 
     Expected: Error - action description cannot be empty.
 
+8. Edit action description: `editaction 1 1 a/helped neighbour`
+
+   Expected: First action's description updated.
+
+9. Edit action severity: `editaction 1 1 s/4`
+
+   Expected: First action's severity updated.
+
+10. Edit action after finalize: `editaction 1 1 a/test`
+
+    Expected: Blocked with error message.
+
 ### Testing finalize and gift commands
 1. Try adding a gift before finalize: `gift 1 g/toy`
 
@@ -1336,3 +1389,15 @@ Given below are instructions to test the app manually.
 1. Add some children and todos, then type `bye` to exit.
 2. Relaunch the app.
 3. Expected: Children and todos are restored.
+
+### Testing help command
+1. Enter: `help`
+
+   Expected: Full command list displayed grouped by category.
+
+### Testing unfinalize command
+1. `finalize` — Expected: Lists frozen.
+2. `unfinalize` — Expected: Lists unfrozen, actions and reassignments re-enabled.
+3. Try `action 1 a/test s/1` after unfinalize — Expected: Action accepted.
+4. `unfinalize` when not finalized — Expected: Error message.
+

@@ -17,6 +17,7 @@ public class HelpCommand extends Command {
                     + "  find n/NAME | a/AGE | l/LOCATION                          Search for children\n\n"
                     + "--- Actions & Lists ---\n"
                     + "  action INDEX a/ACTION s/SEVERITY                       Record an action (severity: -5 to 5)\n"
+                    + "  editaction INDEX ACTION_INDEX [a/DESC] [s/SEVERITY]    Edit an existing action\n"
                     + "  nice                                                       View the nice list\n"
                     + "  naughty                                                    View the naughty list\n"
                     + "  reassign INDEX l/nice|naughty                              Manually reassign a child\n"
